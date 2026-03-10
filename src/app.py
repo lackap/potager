@@ -1,7 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-from MainWindow import MainWindow
+from PyQt5.QtWidgets import QApplication
+from src.view.MainWindow import MainWindow
 
 
 
