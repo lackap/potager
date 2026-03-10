@@ -34,7 +34,7 @@ class FamilleCulture(Enum):
 
 
 class Culture(Enum):
-    NONE = ("", 0, QtGui.QColor(255,255,255), 3, 3, FamilleCulture.RIEN)
+    NONE = ("", 0, QtGui.QColor(128,128,128), 3, 3, FamilleCulture.RIEN)
     FRAMBOISE = ("Framboise", 3, QtGui.QColor(102,0,51), 0, 0, FamilleCulture.FIXE)
     FRAISE = ("Fraise", 2, QtGui.QColor(255,51,51), 0, 0, FamilleCulture.FIXE)
     OLIVIER = ("Olivier", 4, QtGui.QColor(204,255,153), 0, 0, FamilleCulture.FIXE)
@@ -59,10 +59,8 @@ class Culture(Enum):
     def plantable_apres(self, ancienne_culture):
 
         if not ancienne_culture or ancienne_culture is None or ancienne_culture == Culture.NONE or ancienne_culture.famille is None or ancienne_culture.famille.culture_type in self.famille.culture_anterieure_ok:
-            print("On peut planter la culture " + self.culture_type)
             return True
         else:
-            print("On ne peut pas planter la culture " + self.culture_type)
             return False
 
     @staticmethod

@@ -9,7 +9,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("My App")
-        self.setFixedSize(1600, 1000)
+        self.setMinimumSize(1600, 1000)
         self.controller = ProductController()
 
         layout = QHBoxLayout()
