@@ -4,9 +4,9 @@ from PyQt5 import QtGui
 
 class FamilleCulture(Enum):
     # Oignon, Poireau, Echalote
-    AMARYLLIDACEE = (1, "Amaryllidacee", [4, 5, 11])
+    AMARYLLIDACEE = (1, "Amaryllidacee", [4, 5, 11], [1, 2, 11])
     # Carotte Celeri Fenouil Panais
-    APIACEE = (2, "Apiacee", [4, 5, 11])
+    APIACEE = (2, "Apiacee", [4, 5, 11], [1, 2, 11])
     # Choux
     BRASSICACEE = (3, "Brassicacee", [1, 2, 11])
     # Concombre, courgette, courge, butternutt...
@@ -24,13 +24,24 @@ class FamilleCulture(Enum):
     # Famille des éléments fixes
     FIXE = (10, "Fixe", [])
     # Famille pour le rien, on peut tout planter
-    RIEN = (11, "Aucune", [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    RIEN = (11, "Aucune", [1, 2, 3, 4, 5, 6, 7, 8, 9], [])
 
-    def __init__(self, culture_type, culture_name, culture_anterieure_ok = None, culture_anterieure_ko = None):
+    def __init__(self, culture_type, culture_name, culture_anterieure_ok = None, culture_associable = None):
         self.culture_type = culture_type
         self.culture_name = culture_name
         self.culture_anterieure_ok = culture_anterieure_ok
-        self.culture_anterieure_ko = culture_anterieure_ko
+        self.culture_associable = culture_associable
+
+    def is_associable(self, famille):
+        if self.culture_associable is not None and famille.culture_type in self.culture_associable:
+            return True
+        return False
+
+    def is_plantable_apres(self, famille):
+        if self.culture_anterieure_ok is not None and famille in self.culture_anterieure_ok:
+            return True
+        return False
+
 
 
 class Culture(Enum):
@@ -57,8 +68,13 @@ class Culture(Enum):
         self.famille = famille
 
     def plantable_apres(self, ancienne_culture):
+        if not ancienne_culture or ancienne_culture is None or self.famille.is_plantable_apres(ancienne_culture.famille.culture_type):
+            return True
+        else:
+            return False
 
-        if not ancienne_culture or ancienne_culture is None or ancienne_culture == Culture.NONE or ancienne_culture.famille is None or ancienne_culture.famille.culture_type in self.famille.culture_anterieure_ok:
+    def associable(self, culture_associee):
+        if not culture_associee or culture_associee is None or culture_associee.famille.is_associable(self.famille):
             return True
         else:
             return False

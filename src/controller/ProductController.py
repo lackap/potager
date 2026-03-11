@@ -1,6 +1,5 @@
 from src.model.Culture import Culture
 from src.model.EspaceTravaillable import EspaceTravaillable
-from src.model.Planche import Planches
 from src.view.ProductsList import ProductsList
 from src.view.ProductsTable import ProductsTable
 
@@ -84,7 +83,7 @@ class ProductController:
             for column in range(planche.startY, planche.endY):
                 if self.can_insert_culture(row, column, culture):
                     self.placer_culture(culture, row, column)
-                    print(culture.culture_type + " inséré sur la planche " + planche.name)
+                    #print(culture.culture_type + " inséré sur la planche " + planche.name)
                     return True
         return False
 

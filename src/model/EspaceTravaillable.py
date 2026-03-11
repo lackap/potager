@@ -81,6 +81,7 @@ class EspaceTravaillable(object):
                 priority = planche_priority
                 planche_prioritaire = planche
         if priority.level > 0:
+            print("On a trouvé la planche " + planche_prioritaire.name + " pour la culture " + culture.culture_type + " avec la priorité " + str(priority.level))
             return planche_prioritaire
         else:
             return None

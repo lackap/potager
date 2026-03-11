@@ -35,17 +35,21 @@ class Planche(object):
     def get_priority(self, culture, nombre, optimized):
         priority = Priority(0,0)
         if not optimized or self.is_plantable(culture):
-            priority.level = 1
+            priority.level = priority.level + 1
         if priority.level >= 1 and self.can_plant(culture, 1):
-            priority.level = 2
+            priority.level = priority.level + 1
         else:
             priority.level = 0
         if priority.level >= 2:
             count = self.can_plant(culture, nombre)
-            priority.level = 3
+            priority.level = priority.level + 1
             priority.nombre = count
-        if priority.level >= 3 and not self.has_culture():
-            priority.level = 4
+        if priority.level >= 3:
+            if self.validate_association(culture):
+                priority.level = priority.level + 2
+            else:
+                if not self.has_culture():
+                    priority.level = priority.level + 1
         return priority
 
     def can_plant(self, culture, nombre):
@@ -78,6 +82,14 @@ class Planche(object):
                 else:
                     temporary_cultures[row+rows, column+columns] = culture
         return True
+
+    def validate_association(self, culture):
+        for row in range(self.endX-self.startX):
+            for column in range(self.endY-self.startY):
+                if not self.cultures[row, column].associable(culture):
+                    return False
+        return True
+
 
 class Planches(object):
     def __init__(self):
