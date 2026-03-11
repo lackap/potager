@@ -86,6 +86,20 @@ class EspaceTravaillable(object):
         else:
             return None
 
+    def can_insert_culture(self, row, column, culture):
+        match culture.taille_necessaire:
+            case 0:
+                current = self.est_culturable(row, column)
+                if not current:
+                    return False
+            case 1|2|3:
+                for rows in range(culture.taille_necessaire):
+                    for columns in range(culture.taille_necessaire):
+                        current = self.est_culturable(row+rows, column+columns)
+                        if not current:
+                            return False
+        return True
+
     def initialize(self):
         for row in range(self.endX):
             for column in range(self.endY):

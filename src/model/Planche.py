@@ -86,7 +86,7 @@ class Planche(object):
     def validate_association(self, culture):
         for row in range(self.endX-self.startX):
             for column in range(self.endY-self.startY):
-                if not self.cultures[row, column].associable(culture):
+                if not self.cultures[row, column] == Culture.NONE and not self.cultures[row, column].associable(culture):
                     return False
         return True
 
