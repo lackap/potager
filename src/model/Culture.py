@@ -4,9 +4,9 @@ from PyQt5 import QtGui
 
 class FamilleCulture(Enum):
     # Oignon, Poireau, Echalote
-    AMARYLLIDACEE = (1, "Amaryllidacee", [4, 5, 11], [1, 2, 11])
+    AMARYLLIDACEE = (1, "Amaryllidacee", [4, 5, 11], [1, 2])
     # Carotte Celeri Fenouil Panais
-    APIACEE = (2, "Apiacee", [4, 5, 11], [1, 2, 11])
+    APIACEE = (2, "Apiacee", [4, 5, 11], [1, 2])
     # Choux
     BRASSICACEE = (3, "Brassicacee", [1, 2, 11])
     # Concombre, courgette, courge, butternutt...
@@ -33,7 +33,7 @@ class FamilleCulture(Enum):
         self.culture_associable = culture_associable
 
     def is_associable(self, famille):
-        if self.culture_associable is not None and famille.culture_type in self.culture_associable:
+        if self.culture_associable is not None and famille is not FamilleCulture.RIEN and famille.culture_type in self.culture_associable:
             return True
         return False
 
