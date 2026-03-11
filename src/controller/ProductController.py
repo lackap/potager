@@ -8,14 +8,13 @@ class ProductController:
 
     def __init__(self):
         self.espace = EspaceTravaillable()
-        self.list_a_planter = ProductsList()
+        self.list_a_planter = ProductsList(self.espace.list_a_planter)
         self.list_a_planter.setFixedWidth(150)
         self.table = ProductsTable(self, self.espace.endX, self.espace.endY)
-        self.list_plantes = ProductsList()
+        self.list_plantes = ProductsList(self.espace.list_plantes)
         self.list_plantes.setFixedWidth(150)
         self.espace = EspaceTravaillable()
         self.initialize()
-
 
     def add_planche(self, planche):
         self.espace.add_planche(planche)
@@ -26,14 +25,14 @@ class ProductController:
         self.list_a_planter.add_culture(culture, nombre)
 
     def placer_culture(self, culture, row, column):
-        if self.can_insert_culture(row, column, culture) and self.espace.list_a_planter.find_culture_number(culture) > 0:
+        if self.espace.can_insert_culture(row, column, culture) and self.espace.list_a_planter.find_culture_number(culture) > 0:
             self.espace.placer_culture(culture, row, column)
             self.table.color_culture(culture, row, column)
             self.list_plantes.update_label(culture, self.espace.list_plantes.find_culture_number(culture))
             self.list_a_planter.update_label(culture, self.espace.list_a_planter.find_culture_number(culture))
 
     def deplacer_culture(self, rowinit, columninit, row, column):
-        if self.can_insert_culture(row, column, self.espace.get_culture(rowinit, columninit)):
+        if self.espace.can_insert_culture(row, column, self.espace.get_culture(rowinit, columninit)):
             culture = self.espace.deplacer_culture(rowinit, columninit, row, column)
             self.table.uncolor_culture(rowinit, columninit,culture.taille_necessaire)
             self.table.color_culture(culture, row, column)
@@ -43,20 +42,6 @@ class ProductController:
         self.table.uncolor_culture(row, column, culture.taille_necessaire)
         self.list_plantes.update_label(culture, self.espace.list_plantes.find_culture_number(culture))
         self.list_a_planter.update_label(culture, self.espace.list_a_planter.find_culture_number(culture))
-
-    def can_insert_culture(self, row, column, culture):
-        match culture.taille_necessaire:
-            case 0:
-                current = self.espace.est_culturable(row, column)
-                if not current:
-                        return False
-            case 1|2|3:
-                for rows in range(culture.taille_necessaire):
-                    for columns in range(culture.taille_necessaire):
-                        current = self.espace.est_culturable(row+rows, column+columns)
-                        if not current:
-                            return False
-        return True
 
     def auto_fill(self):
         optimized = True
@@ -68,8 +53,8 @@ class ProductController:
                     planche = self.espace.find_meilleure_planche(culture, nombre, optimized)
                     if planche is not None and self.inserer_cultures_planche(planche, culture, nombre):
                         break
-                    else:
-                        print("Aucune planche trouvée pour la culture " + culture.culture_type)
+                    #else:
+                    #    print("Aucune planche trouvée pour la culture " + culture.culture_type)
             optimized = False
 
     def inserer_cultures_planche(self, planche, culture, nombre):
@@ -81,7 +66,7 @@ class ProductController:
     def inserer_culture_planche(self, planche, culture):
         for row in range(planche.startX, planche.endX):
             for column in range(planche.startY, planche.endY):
-                if self.can_insert_culture(row, column, culture):
+                if self.espace.can_insert_culture(row, column, culture):
                     self.placer_culture(culture, row, column)
                     #print(culture.culture_type + " inséré sur la planche " + planche.name)
                     return True
@@ -100,5 +85,7 @@ class ProductController:
 
         for planche in self.espace.planches.planches:
             self.add_planche(planche)
+
+        self.table.refresh()
 
 
