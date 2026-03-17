@@ -22,22 +22,25 @@ class ProductsTable(QTableWidget):
         self.viewport().installEventFilter(self)
         self.controller = controller
 
-    def add_planche(self, planche):
-        sizeX = planche.startX
-        while sizeX < planche.endX:
-            sizeY = planche.startY
-            while sizeY < planche.endY:
-                self.setItem(sizeX, sizeY, QTableWidgetItem())
-                current = planche.ancienne_culture
-                if current is not None and planche.planche_fixe:
-                    self.item(sizeX, sizeY).setBackground(current.color)
-                    self.cellWidget(sizeX,sizeY).setStyleSheet("border-top:1px solid")
-                else:
-                    self.item(sizeX, sizeY).setBackground(Culture.NONE.color)
-                    self.item(sizeX, sizeY).setText(str(sizeX) + " " + str(sizeY))
-                sizeY = sizeY + 1
-            sizeX = sizeX + 1
-        self.setSpan(planche.startX, planche.startY, planche.endX-planche.startX, planche.endY-planche.startY)
+    def refresh(self):
+        for planche in self.controller.espace.planches.planches:
+            for row in range(planche.startX, planche.endX):
+                for column in range(planche.startY, planche.endY):
+                    case_tableau = planche.cultures[row-planche.startX, column-planche.startY]
+                    if self.item(row, column):
+                        self.item(row, column).setBackground(planche.cultures[row-planche.startX, column-planche.startY].culture.color)
+                    else:
+                        self.setItem(row, column, QTableWidgetItem())
+                        self.item(row, column).setBackground(case_tableau.culture.color)
+                    init_culture = case_tableau.init_culture
+                    if init_culture is None:
+                        self.setSpan(row, column, 1, 1)
+                        self.item(row, column).setText("")
+                        case_tableau.init_culture = False
+                    if init_culture:
+                        taille = case_tableau.culture.taille_necessaire
+                        self.item(row, column).setText(case_tableau.culture.culture_type)
+                        self.setSpan(row, column, taille, taille)
 
     def eventFilter(self, source, event):
         if event.type() == QtCore.QEvent.MouseButtonPress:
@@ -64,31 +67,3 @@ class ProductsTable(QTableWidget):
             for widgetItem in widget.selectedItems():
                 self.controller.deplacer_culture(widgetItem.row(), widgetItem.column(), self.rowAt(pos.y()), self.columnAt(pos.x()))
         e.accept()
-
-    # Colore la culture donnée dans le tableau
-    # A partir de l'index
-    def color_culture (self, culture, row, column):
-        match culture.taille_necessaire:
-            case 0:
-                self.item(row, column).setBackground(Culture.NONE.color)
-            case 1 | 2 | 3:
-                for rows in range(culture.taille_necessaire):
-                    for columns in range(culture.taille_necessaire):
-                        self.item(row + rows, column + columns).setBackground(culture.color)
-        self.setSpan(row, column, culture.taille_necessaire, culture.taille_necessaire)
-        self.item(row, column).setText(culture.culture_type)
-
-    def uncolor_culture(self, row, column, size):
-        for rows in range(size):
-            for columns in range(size):
-                self.item(row + rows, column + columns).setBackground(Culture.NONE.color)
-                self.item(row + rows, column + columns).setText(str(row + rows) + " " + str(column + columns))
-        self.setSpan(row, column, 1, 1)
-
-
-
-
-
-
-
-

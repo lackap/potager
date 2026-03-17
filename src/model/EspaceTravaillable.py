@@ -42,6 +42,7 @@ class EspaceTravaillable(object):
                     for columns in range(taille):
                         self.cultures[row+rows, column+columns].culture = culture
                         self.cultures[row+rows, column+columns].planche.add_culture(row+rows, column+columns, culture)
+                self.cultures[row, column].planche.set_culture_start(row, column)
 
         return culture
 
@@ -56,6 +57,8 @@ class EspaceTravaillable(object):
                 for rows in range(culture.taille_necessaire):
                     for columns in range(culture.taille_necessaire):
                         self.cultures[row+rows, column+columns].culture = Culture.NONE
+                        self.cultures[row+rows, column+columns].init_culture = None
+                        self.cultures[row+rows, column+columns].planche.add_culture(row+rows, column+columns, Culture.NONE)
         return culture
 
     def deplacer_culture(self, rowinit, columninit, row, column):
@@ -103,4 +106,4 @@ class EspaceTravaillable(object):
     def initialize(self):
         for row in range(self.endX):
             for column in range(self.endY):
-                self.cultures[row, column] = CaseTableau(row, column)
+                self.cultures[row, column] = CaseTableau()

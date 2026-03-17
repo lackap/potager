@@ -13,38 +13,43 @@ class ProductController:
         self.table = ProductsTable(self, self.espace.endX, self.espace.endY)
         self.list_plantes = ProductsList(self.espace.list_plantes)
         self.list_plantes.setFixedWidth(150)
-        self.espace = EspaceTravaillable()
         self.initialize()
+        self.refreshDisplay()
+
+    def refreshDisplay(self):
+        self.list_a_planter.refresh()
+        self.list_plantes.refresh()
+        self.table.refresh()
 
     def add_planche(self, planche):
         self.espace.add_planche(planche)
-        self.table.add_planche(planche)
 
     def add_culture(self, culture, nombre):
         self.espace.add_culture(culture, nombre)
-        self.list_a_planter.add_culture(culture, nombre)
 
     def placer_culture(self, culture, row, column):
         if self.espace.can_insert_culture(row, column, culture) and self.espace.list_a_planter.find_culture_number(culture) > 0:
             self.espace.placer_culture(culture, row, column)
-            self.table.color_culture(culture, row, column)
-            self.list_plantes.update_label(culture, self.espace.list_plantes.find_culture_number(culture))
-            self.list_a_planter.update_label(culture, self.espace.list_a_planter.find_culture_number(culture))
+            self.refreshDisplay()
 
     def deplacer_culture(self, rowinit, columninit, row, column):
         if self.espace.can_insert_culture(row, column, self.espace.get_culture(rowinit, columninit)):
             culture = self.espace.deplacer_culture(rowinit, columninit, row, column)
-            self.table.uncolor_culture(rowinit, columninit,culture.taille_necessaire)
-            self.table.color_culture(culture, row, column)
+            self.refreshDisplay()
 
     def enlever_culture(self, row, column):
         culture = self.espace.enlever_culture(row, column)
-        self.table.uncolor_culture(row, column, culture.taille_necessaire)
-        self.list_plantes.update_label(culture, self.espace.list_plantes.find_culture_number(culture))
-        self.list_a_planter.update_label(culture, self.espace.list_a_planter.find_culture_number(culture))
+        self.refreshDisplay()
 
     def auto_fill(self):
         optimized = True
+        cultures_associees = self.espace.list_a_planter.grouper_culture_associable()
+        for cultures_associee in cultures_associees:
+            for planche in self.espace.planches.planches:
+                if planche.can_plant_all(cultures_associee):
+                    for culture_associee in cultures_associee.cultures:
+                        self.inserer_cultures_planche(planche, culture_associee.culture, culture_associee.nombre)
+                    break
         for i in range(2):
             for culture_list in self.espace.list_a_planter.cultures:
                 culture = culture_list.culture
@@ -86,6 +91,6 @@ class ProductController:
         for planche in self.espace.planches.planches:
             self.add_planche(planche)
 
-        self.table.refresh()
+        self.refreshDisplay()
 
 

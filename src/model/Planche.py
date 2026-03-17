@@ -1,3 +1,4 @@
+from src.model.CaseTableau import CaseTableau
 from src.model.Culture import Culture
 from src.model.Priority import Priority
 
@@ -13,22 +14,26 @@ class Planche(object):
         self.ancienne_culture = ancienne_culture
         self.planche_fixe = planche_fixe
         self.cultures = {}
+        self.initialize()
 
     def initialize(self):
         for row in range(self.endX-self.startX):
             for column in range(self.endY-self.startY):
-                self.cultures[row, column] = Culture.NONE
+                self.cultures[row, column] = CaseTableau()
 
     def is_plantable(self,culture):
         return culture.plantable_apres(self.ancienne_culture)
 
+    def set_culture_start(self, row, column):
+        self.cultures[row-self.startX, column-self.startY].init_culture = True
+
     def add_culture(self, row, column, culture):
-        self.cultures[row-self.startX, column-self.startY] = culture
+        self.cultures[row-self.startX, column-self.startY].culture = culture
 
     def has_culture(self):
         for row in range(self.endX-self.startX):
             for column in range(self.endY-self.startY):
-                if self.cultures[row, column] is not Culture.NONE:
+                if self.cultures[row, column].culture is not Culture.NONE:
                     return True
         return False
 
@@ -52,12 +57,26 @@ class Planche(object):
                     priority.level = priority.level + 1
         return priority
 
-    def can_plant(self, culture, nombre):
-        count = 0
+    def can_plant_all(self, cultures_associees):
         temporary_cultures = {}
         for row in range(self.endX-self.startX):
             for column in range(self.endY-self.startY):
-                temporary_cultures[row, column] = self.cultures[row, column]
+                temporary_cultures[row, column] = self.cultures[row, column].culture
+        count = 0
+        count_total = 0
+        for culture_for_list in cultures_associees.cultures:
+            count = count + self.can_plant(culture_for_list.culture, culture_for_list.nombre, temporary_cultures)
+            count_total = count_total + culture_for_list.nombre
+        return count == count_total
+
+
+    def can_plant(self, culture, nombre, temporary_cultures=None):
+        if temporary_cultures is None:
+            temporary_cultures = {}
+            for row in range(self.endX-self.startX):
+                for column in range(self.endY-self.startY):
+                    temporary_cultures[row, column] = self.cultures[row, column].culture
+        count = 0
         for count in range(nombre):
             size_x = self.endX-self.startX
             size_y = self.endY-self.startY
@@ -86,9 +105,10 @@ class Planche(object):
     def validate_association(self, culture):
         for row in range(self.endX-self.startX):
             for column in range(self.endY-self.startY):
-                if not self.cultures[row, column] == Culture.NONE and not self.cultures[row, column].associable(culture):
+                if not self.cultures[row, column] == Culture.NONE and not self.cultures[row, column].culture.associable(culture):
                     return False
         return True
+
 
 
 class Planches(object):
