@@ -15,7 +15,6 @@ class EspaceTravaillable(object):
         self.cultures = {}
         self.list_a_planter = ListCulture()
         self.list_plantes = ListCulture()
-        self.count_a_planter = 0
         self.initialize()
         self.planches = Planches()
 

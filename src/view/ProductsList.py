@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QListWidget
 
 
 class ProductsList(QListWidget):
-     def __init__(self, data_list):
+     def __init__(self):
             super().__init__()
             self.setFrameShape(QtWidgets.QFrame.WinPanel)
             self.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -16,11 +16,10 @@ class ProductsList(QListWidget):
             self.setWordWrap(True)
             self.setSortingEnabled(True)
             self.setAcceptDrops(True)
-            self.data_list = data_list
 
-     def refresh(self):
+     def refresh(self, data_list):
         self.clear()
-        for data in self.data_list.cultures:
+        for data in data_list.cultures:
              item = QtWidgets.QListWidgetItem(self.get_label(data.culture, data.nombre))
              self.addItem(item)
 

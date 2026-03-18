@@ -1,29 +1,28 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QTableWidget, QListWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidget, QListWidget, QTableWidgetItem, QHeaderView
 
 from src.model.Culture import Culture
 
 
 class ProductsTable(QTableWidget):
-    def __init__(self, controller, table_rows, table_columns):
+    def __init__(self, table_rows, table_columns):
         super().__init__()
         self.setDragEnabled(True)
         self.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
         self.setAcceptDrops(True)
         self.setRowCount(table_rows)
-        self.setGeometry(300, 0, 600, 600)
         self.setColumnCount(table_columns)
-        self.verticalHeader().setDefaultSectionSize(20)
-        self.horizontalHeader().setDefaultSectionSize(20)
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
-        self.rowHeight(10)
-        self.columnWidth(10)
         self.viewport().installEventFilter(self)
-        self.controller = controller
+        self.controllers = None
+        for row in range(table_rows):
+            self.setRowHeight(row, 15)
+        for column in range(table_columns):
+            self.setColumnWidth(column, 15)
 
-    def refresh(self):
-        for planche in self.controller.espace.planches.planches:
+    def refresh(self, planches):
+        for planche in planches.planches:
             for row in range(planche.startX, planche.endX):
                 for column in range(planche.startY, planche.endY):
                     case_tableau = planche.cultures[row-planche.startX, column-planche.startY]
@@ -47,7 +46,7 @@ class ProductsTable(QTableWidget):
             if event.buttons() == QtCore.Qt.RightButton:
                 item = self.itemAt(event.pos())
                 if item:
-                    self.controller.enlever_culture(item.row(), item.column())
+                    self.controllers.enlever_culture(item.row(), item.column())
                     return True
         return False
 
@@ -61,9 +60,9 @@ class ProductsTable(QTableWidget):
         if isinstance(widget, QListWidget):
             for widgetItem in widget.selectedItems():
                 culture = Culture.get_culture(widgetItem.text().split()[0])
-                self.controller.placer_culture(culture, self.rowAt(pos.y()), self.columnAt(pos.x()))
+                self.controllers.placer_culture(culture, self.rowAt(pos.y()), self.columnAt(pos.x()))
         # Cas d'un élément qu'on a bougé dans le tableau
         if isinstance(widget, QTableWidget):
             for widgetItem in widget.selectedItems():
-                self.controller.deplacer_culture(widgetItem.row(), widgetItem.column(), self.rowAt(pos.y()), self.columnAt(pos.x()))
+                self.controllers.deplacer_culture(widgetItem.row(), widgetItem.column(), self.rowAt(pos.y()), self.columnAt(pos.x()))
         e.accept()

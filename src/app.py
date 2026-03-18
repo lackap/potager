@@ -8,6 +8,6 @@ from src.view.MainWindow import MainWindow
 app = QApplication(sys.argv)
 
 window = MainWindow()
-window.show()
+window.showMaximized()
 
 app.exec()
