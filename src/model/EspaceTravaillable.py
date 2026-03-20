@@ -23,7 +23,10 @@ class EspaceTravaillable(object):
             for column in range(planche.startY, planche.endY):
                 self.cultures[row,column].travaillable = True
                 self.cultures[row,column].planche = planche
-                planche.add_culture(row, column, Culture.NONE)
+                if planche.planche_fixe:
+                    planche.add_culture(row, column, planche.ancienne_culture)
+                else:
+                    planche.add_culture(row, column, Culture.NONE)
 
     def add_culture(self, culture, nombre):
         self.list_a_planter.add_culture(culture, nombre)

@@ -121,10 +121,10 @@ class Planches(object):
         self.plancheCentreBasse = Planche("Centre bas", 24, 29, 12, 29, Culture.POMME_DE_TERRE, False)
         self.plancheBasse = Planche("Basse", 32, 38, 12, 29, Culture.TOMATE, False)
         self.plancheDroite = Planche("Droite", 24, 29, 40, 52, Culture.NONE, False)
-        self.carre1 = Planche("Carre1", 16, 21, 32, 37, False)
-        self.carre2 = Planche("Carre2", 24, 29, 32, 37, False)
-        self.carre3 = Planche("Carre3", 32, 37, 32, 37, False)
-        self.carre4 = Planche("Carre4", 40, 45, 32, 37, False)
-        self.planches = {self.plancheGauche,
+        self.carre1 = Planche("Carre1", 16, 21, 32, 37, Culture.NONE, False)
+        self.carre2 = Planche("Carre2", 24, 29, 32, 37, Culture.NONE,False)
+        self.carre3 = Planche("Carre3", 32, 37, 32, 37, Culture.NONE,False)
+        self.carre4 = Planche("Carre4", 40, 45, 32, 37, Culture.NONE,False)
+        self.planches = {self.plancheFraise, self.plancheFramboise, self.plancheOlivier, self.plancheGauche,
                         self.plancheCentreHaut,self.plancheCentreBasse,self.plancheBasse, self.plancheDroite,
                          self.carre1,self.carre2,self.carre3, self.carre4}
