@@ -12,14 +12,16 @@ class ProductsTable(QTableWidget):
         self.setAcceptDrops(True)
         self.setRowCount(table_rows)
         self.setColumnCount(table_columns)
-        self.horizontalHeader().hide()
-        self.verticalHeader().hide()
         self.viewport().installEventFilter(self)
         self.controllers = None
-        for row in range(table_rows):
-            self.setRowHeight(row, 15)
-        for column in range(table_columns):
-            self.setColumnWidth(column, 15)
+        self.verticalScrollBar().setVisible(False)
+        self.horizontalScrollBar().setVisible(False)
+        self.horizontalHeader().setVisible(False)
+        self.verticalHeader().setVisible(False)
+        self.horizontalHeader().setMinimumSectionSize(1)
+        self.verticalHeader().setMinimumSectionSize(1)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
     def refresh(self, planches):
         for planche in planches.planches:

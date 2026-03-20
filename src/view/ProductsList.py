@@ -16,6 +16,7 @@ class ProductsList(QListWidget):
             self.setWordWrap(True)
             self.setSortingEnabled(True)
             self.setAcceptDrops(True)
+            self.setFixedWidth(150)
 
      def refresh(self, data_list):
         self.clear()
