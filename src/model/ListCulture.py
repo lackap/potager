@@ -17,6 +17,7 @@ class ListCulture(object):
         item = self.find_culture(culture)
         if item is not None:
             item.nombre = item.nombre + 1
+            item.nombre_plantes = item.nombre_plantes - 1
         else:
             self.cultures.append(CultureForList(culture, 1))
 
@@ -24,6 +25,7 @@ class ListCulture(object):
         item = self.find_culture(culture)
         if item is not None:
             item.nombre = item.nombre - 1
+            item.nombre_plantes = item.nombre_plantes + 1
         else:
             self.cultures.append(CultureForList(culture, 0))
 

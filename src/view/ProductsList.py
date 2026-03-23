@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QListWidget
+from PyQt5.QtWidgets import QListWidget, QTreeView, QTreeWidget, QTreeWidgetItem
 
 
-class ProductsList(QListWidget):
+class ProductsList(QTreeWidget):
      def __init__(self):
             super().__init__()
             self.setFrameShape(QtWidgets.QFrame.WinPanel)
@@ -11,22 +11,54 @@ class ProductsList(QListWidget):
             self.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
             self.setDefaultDropAction(QtCore.Qt.CopyAction)
             self.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-            self.setMovement(QtWidgets.QListView.Snap)
-            self.setProperty("isWrapping", True)
-            self.setWordWrap(True)
             self.setSortingEnabled(True)
             self.setAcceptDrops(True)
-            self.setFixedWidth(150)
+            self.header().setVisible(False)
+            self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            self.customContextMenuRequested.connect(self.menuContextTree)
+            self.controllers = None
+
 
      def refresh(self, data_list):
         self.clear()
+        root = QTreeWidgetItem(None, ["Cultures"])
+        self.insertTopLevelItem(0, root)
         for data in data_list.cultures:
-             item = QtWidgets.QListWidgetItem(self.get_label(data.culture, data.nombre))
-             self.addItem(item)
+            inserted = False
+            for index in range(root.childCount()):
+                famille = root.child(index)
+                if famille.text(0) == data.culture.famille.culture_name:
+                    famille.addChild(QTreeWidgetItem(None, [self.get_label(data)]))
+                    inserted = True
+                    break
+            if not inserted:
+                famille = QTreeWidgetItem(None, [data.culture.famille.culture_name])
+                famille.addChild(QTreeWidgetItem(None,  [self.get_label(data)]))
+                root.addChild(famille)
+        self.expandAll()
+
+     def dropEvent(self, e):
+        e.accept()
 
      @staticmethod
-     def get_label(culture, nombre):
-            return culture.culture_type + " " + str(nombre)
+     def get_label(culture_list):
+            return culture_list.culture.culture_type + " " + str(culture_list.nombre) + ", " + str(culture_list.nombre_plantes) + " plantés."
+
+     def menuContextTree(self, point):
+         index = self.indexAt(point)
+         menu = QtWidgets.QMenu()
+         if index.isValid():
+             menu.addSeparator()
+             action_ajout = menu.addAction("Ajouter 1 ")
+             action_ajout.triggered.connect(self.ajouter_culture)
+             action_retrait = menu.addAction("Enlever 1")
+             action_retrait.triggered.connect(self.enlever_culture)
+         action_manage = menu.addAction("Gerer mes cultures")
+         action_manage.triggered.connect(self.switch_to_view)
+         menu.exec_(self.mapToGlobal(point))
+
+     def switch_to_view(self):
+         self.parent().parent().switch_to_view(1)
 
 
 

@@ -11,7 +11,6 @@ class ProductController:
         self.espace_controller = EspaceController()
         self.ui_controller = UiController(self.espace_controller.espace.endX, self.espace_controller.espace.endY)
         self.initialize()
-        self.ui_controller.refresh_display(self.espace_controller.espace)
 
 
     def add_planche(self, planche):
@@ -39,14 +38,15 @@ class ProductController:
     def save(self):
         self.file_controller.save(self.espace_controller.espace)
 
-    def load(self):
+    def load(self, refresh = True):
         loaded = self.file_controller.load(self.espace_controller.espace)
-        self.ui_controller.refresh_display(self.espace_controller.espace)
+        if refresh:
+            self.ui_controller.refresh_display(self.espace_controller.espace)
         return loaded
 
     def initialize(self):
-        if not self.load():
-            self.espace_controller.initialize()
+        #if not self.load(False):
+        self.espace_controller.initialize()
         self.ui_controller.initialize(self)
         self.ui_controller.refresh_display(self.espace_controller.espace)
 

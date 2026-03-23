@@ -24,8 +24,8 @@ class Planche(object):
     def is_plantable(self,culture):
         return culture.plantable_apres(self.ancienne_culture)
 
-    def set_culture_start(self, row, column):
-        self.cultures[row-self.startX, column-self.startY].init_culture = True
+    def set_culture_start(self, row, column, is_start):
+        self.cultures[row-self.startX, column-self.startY].init_culture = is_start
 
     def add_culture(self, row, column, culture):
         self.cultures[row-self.startX, column-self.startY].culture = culture
@@ -116,7 +116,7 @@ class Planches(object):
         self.plancheFramboise = Planche("Framboise", 4, 6, 15, 22, Culture.FRAMBOISE, True)
         self.plancheFraise = Planche("Fraise", 9, 13, 12, 25, Culture.FRAISE, True)
         self.plancheOlivier = Planche("Olivier", 8, 12, 29, 32, Culture.OLIVIER, True)
-        self.plancheGauche = Planche("Gauche", 20, 34, 6, 9, Culture.TOMATE, False)
+        self.plancheGauche = Planche("Gauche", 20, 34, 5, 9, Culture.TOMATE, False)
         self.plancheCentreHaut = Planche("Centre haut", 16, 21, 12, 29, Culture.COURGETTE, False)
         self.plancheCentreBasse = Planche("Centre bas", 24, 29, 12, 29, Culture.POMME_DE_TERRE, False)
         self.plancheBasse = Planche("Basse", 32, 38, 12, 29, Culture.TOMATE, False)
@@ -128,3 +128,10 @@ class Planches(object):
         self.planches = {self.plancheFraise, self.plancheFramboise, self.plancheOlivier, self.plancheGauche,
                         self.plancheCentreHaut,self.plancheCentreBasse,self.plancheBasse, self.plancheDroite,
                          self.carre1,self.carre2,self.carre3, self.carre4}
+
+    def find_planche(self, row, column):
+        for planche in self.planches:
+            if planche.startX <= row <= planche.endX:
+                if planche.startY <= column <= planche.endY:
+                    return planche
+        return None

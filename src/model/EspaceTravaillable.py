@@ -14,7 +14,6 @@ class EspaceTravaillable(object):
         self.defaultColor = QtGui.QColor(192,192,192)
         self.cultures = {}
         self.list_a_planter = ListCulture()
-        self.list_plantes = ListCulture()
         self.initialize()
         self.planches = Planches()
 
@@ -22,7 +21,6 @@ class EspaceTravaillable(object):
         for row in range(planche.startX, planche.endX):
             for column in range(planche.startY, planche.endY):
                 self.cultures[row,column].travaillable = True
-                self.cultures[row,column].planche = planche
                 if planche.planche_fixe:
                     planche.add_culture(row, column, planche.ancienne_culture)
                 else:
@@ -35,37 +33,36 @@ class EspaceTravaillable(object):
         if taille is None:
             taille = culture.taille_necessaire
         self.list_a_planter.decrease_culture(culture)
-        self.list_plantes.increase_culture(culture)
         match taille:
             case 0:
                 self.cultures[row, column].culture = Culture.NONE
             case 1 | 2 | 3:
-                for rows in range(taille):
-                    for columns in range(taille):
-                        self.cultures[row+rows, column+columns].culture = culture
-                        self.cultures[row+rows, column+columns].planche.add_culture(row+rows, column+columns, culture)
-                self.cultures[row, column].planche.set_culture_start(row, column)
+
+                for rowindex in range(row, row+taille):
+                    for columnindex in range(column, column+taille):
+                        self.cultures[rowindex, columnindex].culture = culture
+                        self.planches.find_planche(rowindex, columnindex).add_culture(rowindex, columnindex, culture)
+                self.planches.find_planche(row, column).set_culture_start(row, column, True)
 
         return culture
 
     def enlever_culture(self, row, column):
         culture = self.cultures[row, column].culture
-        self.list_plantes.decrease_culture(culture)
         self.list_a_planter.increase_culture(culture)
         match culture.taille_necessaire:
             case 0:
                 self.cultures[row, column].culture = Culture.NONE
             case 1 | 2 | 3:
-                for rows in range(culture.taille_necessaire):
-                    for columns in range(culture.taille_necessaire):
-                        self.cultures[row+rows, column+columns].culture = Culture.NONE
-                        self.cultures[row+rows, column+columns].init_culture = None
-                        self.cultures[row+rows, column+columns].planche.add_culture(row+rows, column+columns, Culture.NONE)
+                for rowindex in range(row, row+culture.taille_necessaire):
+                    for columnindex in range(column, column+culture.taille_necessaire):
+                        self.cultures[rowindex,columnindex].culture = Culture.NONE
+                        self.planches.find_planche(rowindex, columnindex).set_culture_start(rowindex, columnindex, None)
+                        self.planches.find_planche(rowindex, columnindex).add_culture(rowindex, columnindex, Culture.NONE)
         return culture
 
     def deplacer_culture(self, rowinit, columninit, row, column):
         culture = self.cultures[rowinit, columninit].culture
-        self.placer_culture(Culture.NONE, rowinit,columninit, culture.taille_necessaire)
+        self.enlever_culture(rowinit, columninit)
         self.placer_culture(culture, row, column)
         return culture
 

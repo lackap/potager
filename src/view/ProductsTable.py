@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QTableWidget, QListWidget, QTableWidgetItem, QHeaderView
 
 from src.model.Culture import Culture
+from src.view.ProductsList import ProductsList
 
 
 class ProductsTable(QTableWidget):
@@ -59,9 +60,9 @@ class ProductsTable(QTableWidget):
         pos = e.pos()
         widget = e.source()
         # Cas d'un élément drop depuis la liste des éléments a planter
-        if isinstance(widget, QListWidget):
+        if isinstance(widget, ProductsList):
             for widgetItem in widget.selectedItems():
-                culture = Culture.get_culture(widgetItem.text().split()[0])
+                culture = Culture.get_culture(widgetItem.text(0).split()[0])
                 self.controllers.placer_culture(culture, self.rowAt(pos.y()), self.columnAt(pos.x()))
         # Cas d'un élément qu'on a bougé dans le tableau
         if isinstance(widget, QTableWidget):
