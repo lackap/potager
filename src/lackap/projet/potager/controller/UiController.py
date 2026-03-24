@@ -12,6 +12,12 @@ class UiController:
         self.list_a_planter.refresh(espace.list_a_planter)
         self.table.refresh(espace.planches)
 
+    def refresh_list(self, espace):
+        self.list_a_planter.refresh(espace.list_a_planter)
+
+    def refresh_table(self,espace):
+        self.table.refresh(espace.planches)
+
     def initialize(self, controllers):
         self.list_a_planter.controllers = controllers
         self.table.controllers = controllers

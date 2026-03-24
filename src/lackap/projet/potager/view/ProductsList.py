@@ -1,6 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QListWidget, QTreeView, QTreeWidget, QTreeWidgetItem
 
+from src.lackap.projet.potager.model.Culture import Culture
+
 
 class ProductsList(QTreeWidget):
      def __init__(self):
@@ -52,16 +54,21 @@ class ProductsList(QTreeWidget):
              action_ajout = menu.addAction("Ajouter 1 ")
              action_ajout.triggered.connect(lambda: self.ajouter_culture(index))
              action_retrait = menu.addAction("Enlever 1")
-             action_retrait.triggered.connect(self.enlever_culture)
+             action_retrait.triggered.connect(lambda: self.enlever_culture(index))
          action_manage = menu.addAction("Gerer mes cultures")
          action_manage.triggered.connect(self.switch_to_view)
          menu.exec_(self.mapToGlobal(point))
 
      def ajouter_culture(self, index):
-        self.controllers.espace_controller.espace.self.itemFromIndex(index).text(0)
+         culture = Culture.get_culture(self.itemFromIndex(index).text(0).split(" ")[0])
+         self.controllers.espace_controller.add_culture(culture, 1)
+         self.controllers.ui_controller.refresh_list(self.controllers.espace_controller.espace)
+
 
      def enlever_culture(self, index):
-         self.controllers.self.itemFromIndex(index).text(0)
+         culture = Culture.get_culture(self.itemFromIndex(index).text(0).split(" ")[0])
+         self.controllers.espace_controller.add_culture(culture, -1)
+         self.controllers.ui_controller.refresh_list(self.controllers.espace_controller.espace)
 
      def switch_to_view(self):
          self.parent().parent().switch_to_view(1)
