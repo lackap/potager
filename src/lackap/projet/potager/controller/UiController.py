@@ -1,5 +1,5 @@
-from src.lackap.project.potager.view.ProductsList import ProductsList
-from src.lackap.project.potager.view.ProductsTable import ProductsTable
+from src.lackap.projet.potager.view.ProductsList import ProductsList
+from src.lackap.projet.potager.view.ProductsTable import ProductsTable
 
 
 class UiController:

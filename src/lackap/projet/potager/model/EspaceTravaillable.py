@@ -1,10 +1,10 @@
 from PyQt5 import QtGui
 
-from src.lackap.project.potager.model.CaseTableau import CaseTableau
-from src.lackap.project.potager.model.Culture import Culture
-from src.lackap.project.potager.model.ListCulture import ListCulture
-from src.lackap.project.potager.model.Planche import Planches
-from src.lackap.project.potager.model.Priority import Priority
+from src.lackap.projet.potager.model.CaseTableau import CaseTableau
+from src.lackap.projet.potager.model.Culture import Culture
+from src.lackap.projet.potager.model.ListCulture import ListCulture
+from src.lackap.projet.potager.model.Planche import Planches
+from src.lackap.projet.potager.model.Priority import Priority
 
 
 class EspaceTravaillable(object):
@@ -48,22 +48,24 @@ class EspaceTravaillable(object):
 
     def enlever_culture(self, row, column):
         culture = self.cultures[row, column].culture
-        self.list_a_planter.increase_culture(culture)
-        match culture.taille_necessaire:
-            case 0:
-                self.cultures[row, column].culture = Culture.NONE
-            case 1 | 2 | 3:
-                for rowindex in range(row, row+culture.taille_necessaire):
-                    for columnindex in range(column, column+culture.taille_necessaire):
-                        self.cultures[rowindex,columnindex].culture = Culture.NONE
-                        self.planches.find_planche(rowindex, columnindex).set_culture_start(rowindex, columnindex, None)
-                        self.planches.find_planche(rowindex, columnindex).add_culture(rowindex, columnindex, Culture.NONE)
-        return culture
+        if culture is not None and not culture == Culture.NONE:
+            self.list_a_planter.increase_culture(culture)
+            match culture.taille_necessaire:
+                case 0:
+                    self.cultures[row, column].culture = Culture.NONE
+                case 1 | 2 | 3:
+                    for rowindex in range(row, row+culture.taille_necessaire):
+                        for columnindex in range(column, column+culture.taille_necessaire):
+                            self.cultures[rowindex,columnindex].culture = Culture.NONE
+                            self.planches.find_planche(rowindex, columnindex).set_culture_start(rowindex, columnindex, None)
+                            self.planches.find_planche(rowindex, columnindex).add_culture(rowindex, columnindex, Culture.NONE)
+            return culture
+        return None
 
     def deplacer_culture(self, rowinit, columninit, row, column):
         culture = self.cultures[rowinit, columninit].culture
-        self.enlever_culture(rowinit, columninit)
-        self.placer_culture(culture, row, column)
+        if self.enlever_culture(rowinit, columninit) is not None:
+            self.placer_culture(culture, row, column)
         return culture
 
     def get_culture(self, row, column):

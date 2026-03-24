@@ -1,6 +1,6 @@
-from src.lackap.project.potager.model.CaseTableau import CaseTableau
-from src.lackap.project.potager.model.Culture import Culture
-from src.lackap.project.potager.model.Priority import Priority
+from src.lackap.projet.potager.model.CaseTableau import CaseTableau
+from src.lackap.projet.potager.model.Culture import Culture
+from src.lackap.projet.potager.model.Priority import Priority
 
 
 class Planche(object):

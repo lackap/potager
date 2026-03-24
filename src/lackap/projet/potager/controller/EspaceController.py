@@ -1,5 +1,5 @@
-from src.lackap.project.potager.model.Culture import Culture
-from src.lackap.project.potager.model.EspaceTravaillable import EspaceTravaillable
+from src.lackap.projet.potager.model.Culture import Culture
+from src.lackap.projet.potager.model.EspaceTravaillable import EspaceTravaillable
 
 
 class EspaceController:
@@ -27,7 +27,7 @@ class EspaceController:
         return False
 
     def enlever_culture(self, row, column):
-        self.espace.enlever_culture(row, column)
+        return self.espace.enlever_culture(row, column)
 
     def auto_fill(self):
         optimized = True

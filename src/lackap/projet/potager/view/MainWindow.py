@@ -1,10 +1,10 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow
 
-from src.lackap.project.potager.controller.ProductController import ProductController
-from src.lackap.project.potager.controller.UiController import UiController
-from src.lackap.project.potager.view.DisplayCultureWidget import DisplayCultureWidget
-from src.lackap.project.potager.view.ManageCultureWidget import ManageCultureWidget
+from src.lackap.projet.potager.controller.ProductController import ProductController
+from src.lackap.projet.potager.controller.UiController import UiController
+from src.lackap.projet.potager.view.DisplayCultureWidget import DisplayCultureWidget
+from src.lackap.projet.potager.view.ManageCultureWidget import ManageCultureWidget
 
 
 # Subclass QMainWindow to customize your application's main window
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
     def switch_to_view(self, index):
         if index == 0:
             self.controllers.ui_controller = UiController(self.controllers.espace_controller.espace.endX, self.controllers.espace_controller.espace.endY)
+            self.controllers.ui_controller.initialize(self.controllers)
             self.controllers.ui_controller.refresh_display(self.controllers.espace_controller.espace)
             self.setCentralWidget(DisplayCultureWidget(self))
         if index == 1:

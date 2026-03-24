@@ -1,0 +1,17 @@
+[project]
+name = "potager"
+version = "0.0.1"
+authors = [
+    { name="Pascal BURDIN" },
+]
+description = "Application de visualisation et gestion de son potager"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+
+[project.urls]
+Homepage = "https://github.com/lackap/potager"

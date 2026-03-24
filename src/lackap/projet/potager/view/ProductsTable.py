@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
 
-from src.lackap.project.potager.model.Culture import Culture
-from src.lackap.project.potager.view.ProductsList import ProductsList
+from src.lackap.projet.potager.model.Culture import Culture
+from src.lackap.projet.potager.view.ProductsList import ProductsList
 
 
 class ProductsTable(QTableWidget):
@@ -49,8 +49,8 @@ class ProductsTable(QTableWidget):
             if event.buttons() == QtCore.Qt.RightButton:
                 item = self.itemAt(event.pos())
                 if item:
-                    self.controllers.enlever_culture(item.row(), item.column())
-                    return True
+                    if self.controllers.enlever_culture(item.row(), item.column()) is not None:
+                        return True
         return False
 
     def dragEnterEvent(self, e):

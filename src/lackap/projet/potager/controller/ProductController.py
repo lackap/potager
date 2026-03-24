@@ -1,6 +1,6 @@
-from src.lackap.project.potager.controller.EspaceController import EspaceController
-from src.lackap.project.potager.controller.FileController import FileController
-from src.lackap.project.potager.controller.UiController import UiController
+from src.lackap.projet.potager.controller.EspaceController import EspaceController
+from src.lackap.projet.potager.controller.FileController import FileController
+from src.lackap.projet.potager.controller.UiController import UiController
 
 
 class ProductController:
@@ -27,8 +27,8 @@ class ProductController:
             self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def enlever_culture(self, row, column):
-        self.espace_controller.enlever_culture(row, column)
-        self.ui_controller.refresh_display(self.espace_controller.espace)
+        if self.espace_controller.enlever_culture(row, column) is not None:
+            self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def auto_fill(self):
         self.espace_controller.auto_fill()
