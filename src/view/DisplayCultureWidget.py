@@ -8,6 +8,9 @@ class DisplayCultureWidget(QWidget):
         layout = QHBoxLayout()
 
         layout_left = QVBoxLayout()
+        display_culture_button = QPushButton()
+        display_culture_button.setText("Afficher les cultures")
+        display_culture_button.clicked.connect(lambda: self.switch_to_view(1))
         auto_fill_button = QPushButton()
         auto_fill_button.setText("Autofill")
         auto_fill_button.clicked.connect(self.autofill_click)
@@ -19,6 +22,7 @@ class DisplayCultureWidget(QWidget):
         load_button.clicked.connect(self.load_click)
 
         layout_left.addWidget(self.controllers.ui_controller.list_a_planter)
+        layout_left.addWidget(display_culture_button)
         layout_left.addWidget(auto_fill_button)
         layout_left.addWidget(save_button)
         layout_left.addWidget(load_button)
