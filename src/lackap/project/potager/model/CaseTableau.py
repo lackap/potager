@@ -1,4 +1,4 @@
-from src.model.Culture import Culture
+from src.lackap.project.potager.model.Culture import Culture
 
 
 class CaseTableau(object):

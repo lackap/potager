@@ -1,5 +1,5 @@
-from src.model.CultureForList import CultureForList
-from src.model.CulturesAssociees import CulturesAssociees
+from src.lackap.project.potager.model.CultureForList import CultureForList
+from src.lackap.project.potager.model.CulturesAssociees import CulturesAssociees
 
 
 class ListCulture(object):

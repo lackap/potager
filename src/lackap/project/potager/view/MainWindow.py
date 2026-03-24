@@ -1,11 +1,10 @@
 from PyQt5 import QtGui
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QMainWindow
 
-from src.controller.ProductController import ProductController
-from src.controller.UiController import UiController
-from src.view.DisplayCultureWidget import DisplayCultureWidget
-from src.view.ManageCultureWidget import ManageCultureWidget
+from src.lackap.project.potager.controller.ProductController import ProductController
+from src.lackap.project.potager.controller.UiController import UiController
+from src.lackap.project.potager.view.DisplayCultureWidget import DisplayCultureWidget
+from src.lackap.project.potager.view.ManageCultureWidget import ManageCultureWidget
 
 
 # Subclass QMainWindow to customize your application's main window

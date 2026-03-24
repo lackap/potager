@@ -1,5 +1,5 @@
-from src.model.Culture import Culture
-from src.model.EspaceTravaillable import EspaceTravaillable
+from src.lackap.project.potager.model.Culture import Culture
+from src.lackap.project.potager.model.EspaceTravaillable import EspaceTravaillable
 
 
 class EspaceController:

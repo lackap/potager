@@ -1,6 +1,6 @@
-from src.controller.EspaceController import EspaceController
-from src.controller.FileController import FileController
-from src.controller.UiController import UiController
+from src.lackap.project.potager.controller.EspaceController import EspaceController
+from src.lackap.project.potager.controller.FileController import FileController
+from src.lackap.project.potager.controller.UiController import UiController
 
 
 class ProductController:

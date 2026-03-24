@@ -1,8 +1,8 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 
-from src.model.Culture import Culture
-from src.view.ProductCard import ProductCardWidget
+from src.lackap.project.potager.model.Culture import Culture
+from src.lackap.project.potager.view.ProductCard import ProductCardWidget
 
 
 class ManageCultureWidget(QWidget):

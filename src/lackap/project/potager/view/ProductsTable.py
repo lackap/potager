@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QTableWidget, QListWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
 
-from src.model.Culture import Culture
-from src.view.ProductsList import ProductsList
+from src.lackap.project.potager.model.Culture import Culture
+from src.lackap.project.potager.view.ProductsList import ProductsList
 
 
 class ProductsTable(QTableWidget):
