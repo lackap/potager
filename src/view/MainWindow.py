@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 
 from src.controller.ProductController import ProductController
+from src.controller.UiController import UiController
 from src.view.DisplayCultureWidget import DisplayCultureWidget
 from src.view.ManageCultureWidget import ManageCultureWidget
 
@@ -20,6 +21,8 @@ class MainWindow(QMainWindow):
 
     def switch_to_view(self, index):
         if index == 0:
+            self.controllers.ui_controller = UiController(self.controllers.espace_controller.espace.endX, self.controllers.espace_controller.espace.endY)
+            self.controllers.ui_controller.refresh_display(self.controllers.espace_controller.espace)
             self.setCentralWidget(DisplayCultureWidget(self))
         if index == 1:
             self.setCentralWidget(ManageCultureWidget(self))

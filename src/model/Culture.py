@@ -55,6 +55,8 @@ class Culture(Enum):
     POIREAU = ("Poireau", 1, QtGui.QColor(76, 166, 107), 3, 3, FamilleCulture.AMARYLLIDACEE)
     OIGNON = ("Oignon", 1, QtGui.QColor(213,132,144), 3, 3, FamilleCulture.AMARYLLIDACEE)
     CAROTTE = ("Carotte", 1, QtGui.QColor(244,102,27), 3, 3, FamilleCulture.APIACEE)
+    MELON = ("Melon", 3, QtGui.QColor(251,202,127), 4, 6, FamilleCulture.CUCURBITACEE)
+    CONCOMBRE = ("Concombre", 3, QtGui.QColor(55,110,32), 4, 5, FamilleCulture.CUCURBITACEE)
 
     def __init__(self, culture_type, taille_necessaire, color = None, mois_semi = None, mois_plantation = None, famille = None):
         self.culture_type = culture_type
