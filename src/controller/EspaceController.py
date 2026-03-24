@@ -72,6 +72,8 @@ class EspaceController:
         self.add_culture(Culture.POIREAU, 25)
         self.add_culture(Culture.CAROTTE, 25)
         self.add_culture(Culture.OIGNON, 15)
+        self.add_culture(Culture.MELON, 3)
+        self.add_culture(Culture.CONCOMBRE, 4)
 
         for planche in self.espace.planches.planches:
             self.add_planche(planche)

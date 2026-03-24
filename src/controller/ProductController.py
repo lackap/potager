@@ -1,7 +1,6 @@
 from src.controller.EspaceController import EspaceController
 from src.controller.FileController import FileController
 from src.controller.UiController import UiController
-from src.model.Culture import Culture
 
 
 class ProductController:
