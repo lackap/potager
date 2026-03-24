@@ -9,7 +9,9 @@ class ListCulture(object):
     def add_culture(self, culture, nombre):
         item = self.find_culture(culture)
         if item is not None:
-            item.nombre = nombre
+            if not item.nombre:
+                item.nombre = 0
+            item.nombre = item.nombre + nombre
         else:
             self.cultures.append(CultureForList(culture, nombre))
 

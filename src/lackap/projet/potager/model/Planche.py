@@ -87,8 +87,8 @@ class Planche(object):
         return count
 
     def check_plant_iteration(self, size_x, size_y, culture, temporary_cultures):
-        for row in range(size_x-culture.taille_necessaire):
-            for column in range(size_y-culture.taille_necessaire):
+        for row in range(size_x-culture.taille_necessaire+1):
+            for column in range(size_y-culture.taille_necessaire+1):
                 if self.check_plant_cell(row, column, culture.taille_necessaire, culture, temporary_cultures):
                     return True
         return False

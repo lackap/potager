@@ -42,12 +42,13 @@ class EspaceController:
             for culture_list in self.espace.list_a_planter.cultures:
                 culture = culture_list.culture
                 nombre = culture_list.nombre
-                for count in range(nombre):
+                while self.espace.list_a_planter.find_culture_number(culture_list.culture) > 0:
                     planche = self.espace.find_meilleure_planche(culture, nombre, optimized)
+                    if planche is None:
+                        print("Aucune planche trouvée pour la culture " + culture.culture_type)
+                        break
                     if planche is not None and self.inserer_cultures_planche(planche, culture, nombre):
                         break
-                    #else:
-                    #    print("Aucune planche trouvée pour la culture " + culture.culture_type)
             optimized = False
 
     def inserer_cultures_planche(self, planche, culture, nombre):
