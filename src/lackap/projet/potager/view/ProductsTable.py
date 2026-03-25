@@ -1,4 +1,6 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import QEvent, Qt
+from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
 
 from src.lackap.projet.potager.model.Culture import Culture
@@ -26,11 +28,11 @@ class ProductsTable(QTableWidget):
 
     def refresh(self, planches):
         for planche in planches.planches:
-            for row in range(planche.startX, planche.endX):
-                for column in range(planche.startY, planche.endY):
-                    case_tableau = planche.cultures[row-planche.startX, column-planche.startY]
+            for row in range(planche.start_x, planche.end_x):
+                for column in range(planche.start_y, planche.end_y):
+                    case_tableau = planche.cultures_basse[row-planche.start_x, column-planche.start_y]
                     if self.item(row, column):
-                        self.item(row, column).setBackground(planche.cultures[row-planche.startX, column-planche.startY].culture.color)
+                        self.item(row, column).setBackground(planche.cultures_basse[row-planche.start_x, column-planche.start_y].culture.color)
                     else:
                         self.setItem(row, column, QTableWidgetItem())
                         self.item(row, column).setBackground(case_tableau.culture.color)
@@ -45,9 +47,10 @@ class ProductsTable(QTableWidget):
                         self.setSpan(row, column, taille, taille)
 
     def eventFilter(self, source, event):
-        if event.type() == QtCore.QEvent.MouseButtonPress:
-            if event.buttons() == QtCore.Qt.RightButton:
-                item = self.itemAt(event.pos())
+        if event.type() == QEvent.Type.MouseButtonPress:
+            mouse_event = QMouseEvent(event)
+            if mouse_event.buttons() == Qt.MouseButton.RightButton:
+                item = self.itemAt(mouse_event.pos())
                 if item:
                     if self.controllers.enlever_culture(item.row(), item.column()) is not None:
                         return True
