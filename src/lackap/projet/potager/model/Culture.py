@@ -1,6 +1,7 @@
 from enum import Enum
 
-from PyQt5 import QtGui
+from PyQt6 import QtGui
+
 
 class HauteurCulture(Enum):
     BASSE=1,
@@ -19,7 +20,7 @@ class FamilleCulture(Enum):
     # Tomate, Aubergine, piment, poivron
     SOLANACEE = (5, "Solanacee", [9, 11])
     # Haricots, lentilles, pois
-    FABACEE = (6, "Fabacee", [3, 7, 8, 11])
+    FABACEE = (6, "Fabacee", [3, 7, 8, 11], [2])
     #Betterave, Epinard
     AMARANTHACEE = (7, "Amaranthacee", [1, 2, 11])
     # Salade, Artichaud, endive, tournesol
@@ -62,6 +63,7 @@ class Culture(Enum):
     CAROTTE = ("Carotte", 1, QtGui.QColor(244,102,27), 3, 3, HauteurCulture.COMPLETE, FamilleCulture.APIACEE)
     MELON = ("Melon", 3, QtGui.QColor(251,202,127), 4, 6, HauteurCulture.BASSE, FamilleCulture.CUCURBITACEE)
     CONCOMBRE = ("Concombre", 3, QtGui.QColor(55,110,32), 4, 5, HauteurCulture.BASSE, FamilleCulture.CUCURBITACEE)
+    HARICOT = ("Haricot", 1, QtGui.QColor(188, 207, 143), 5, 6, HauteurCulture.COMPLETE, FamilleCulture.FABACEE)
 
     def __init__(self, culture_type, taille_necessaire, color = None, mois_semi = None, mois_plantation = None, hauteur_culture = HauteurCulture.BASSE, famille = None):
         self.culture_type = culture_type

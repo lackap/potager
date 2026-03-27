@@ -1,6 +1,8 @@
 from src.lackap.projet.potager.controller.EspaceController import EspaceController
 from src.lackap.projet.potager.controller.FileController import FileController
 from src.lackap.projet.potager.controller.UiController import UiController
+from src.lackap.projet.potager.model.Culture import Culture
+from src.lackap.projet.potager.model.Planche import Planche
 
 
 class ProductController:
@@ -11,6 +13,13 @@ class ProductController:
         self.ui_controller = UiController(self.espace_controller.espace.endX, self.espace_controller.espace.endY)
         self.initialize()
 
+    def clear(self):
+        self.espace_controller.clear()
+        self.ui_controller.refresh_display(self.espace_controller.espace)
+
+    def add_planche_by_values(self, name, start_x, start_y, end_x, end_y):
+        self.add_planche(Planche(name, start_x, end_x, start_y, end_y, Culture.NONE, False))
+        self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def add_planche(self, planche):
         self.espace_controller.add_planche(planche)
@@ -23,7 +32,7 @@ class ProductController:
             self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def deplacer_culture(self, rowinit, columninit, row, column):
-        if self.espace_controller.deplacer_culture(rowinit, columninit, row, column):
+        if self.espace_controller.deplacer_culture(rowinit, columninit, row, column, self.ui_controller.display_level):
             self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def enlever_culture(self, row, column):

@@ -1,6 +1,7 @@
-from PyQt5 import QtWidgets
 
 import sys
+
+from PyQt6 import QtWidgets
 
 from src.lackap.projet.potager.view.MainWindow import MainWindow
 

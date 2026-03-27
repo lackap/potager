@@ -1,22 +1,19 @@
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
-
+from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtWidgets import QTreeWidgetItem, QTreeWidget, QFrame, QAbstractItemView
 from src.lackap.projet.potager.model.Culture import Culture
 
 
 class ProductsList(QTreeWidget):
      def __init__(self):
             super().__init__()
-            self.setFrameShape(QtWidgets.QFrame.WinPanel)
-            self.setFrameShadow(QtWidgets.QFrame.Raised)
+            self.setFrameShadow(QFrame.Shadow.Raised)
             self.setDragEnabled(True)
-            self.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
-            self.setDefaultDropAction(QtCore.Qt.CopyAction)
-            self.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+            self.setDragDropMode(QtWidgets.QAbstractItemView.DragDropMode.DragDrop)
+            self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
             self.setSortingEnabled(True)
             self.setAcceptDrops(True)
             self.header().setVisible(False)
-            self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
             self.customContextMenuRequested.connect(self.menuContextTree)
             self.controllers = None
 
@@ -57,7 +54,7 @@ class ProductsList(QTreeWidget):
              action_retrait.triggered.connect(lambda: self.enlever_culture(index))
          action_manage = menu.addAction("Gerer mes cultures")
          action_manage.triggered.connect(self.switch_to_view)
-         menu.exec_(self.mapToGlobal(point))
+         menu.exec(self.mapToGlobal(point))
 
      def ajouter_culture(self, index):
          culture = Culture.get_culture(self.itemFromIndex(index).text(0).split(" ")[0])

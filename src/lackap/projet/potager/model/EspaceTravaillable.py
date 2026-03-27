@@ -1,4 +1,3 @@
-from PyQt5 import QtGui
 
 from src.lackap.projet.potager.model.CaseTableau import CaseTableau
 from src.lackap.projet.potager.model.Culture import Culture, HauteurCulture
@@ -11,12 +10,18 @@ class EspaceTravaillable(object):
     def __init__(self):
         self.endX = 60
         self.endY = 60
-        self.defaultColor = QtGui.QColor(192,192,192)
         self.cultures_haute = {}
         self.cultures_basse = {}
         self.list_a_planter = ListCulture()
         self.initialize()
         self.planches = Planches()
+
+    def clear(self):
+        self.cultures_haute.clear()
+        self.cultures_basse.clear()
+        self.planches.clear()
+        self.list_a_planter.clear()
+        self.initialize()
 
     def add_planche(self,planche):
         for row in range(planche.start_x, planche.end_x):
@@ -27,22 +32,21 @@ class EspaceTravaillable(object):
                     planche.add_culture(row, column, planche.ancienne_culture)
                 else:
                     planche.add_culture(row, column, Culture.NONE)
+        self.planches.planches.append(planche)
 
     def add_culture(self, culture, nombre):
         self.list_a_planter.add_culture(culture, nombre)
 
-    def placer_culture(self, culture, row, column, taille = None):
-        if taille is None:
-            taille = culture.taille_necessaire
+    def placer_culture(self, culture, row, column):
         self.list_a_planter.decrease_culture(culture)
-        match taille:
+        match culture.taille_necessaire:
             case 0:
                 self.cultures_haute[row, column].culture = Culture.NONE
                 self.cultures_basse[row, column].culture = Culture.NONE
             case 1 | 2 | 3:
 
-                for rowindex in range(row, row+taille):
-                    for columnindex in range(column, column+taille):
+                for rowindex in range(row, row+culture.taille_necessaire):
+                    for columnindex in range(column, column+culture.taille_necessaire):
                         if culture.hauteur_culture == HauteurCulture.BASSE or culture.hauteur_culture == HauteurCulture.COMPLETE:
                             self.cultures_basse[rowindex, columnindex].culture = culture
                         if culture.hauteur_culture == HauteurCulture.HAUTE or culture.hauteur_culture == HauteurCulture.COMPLETE:
@@ -67,6 +71,7 @@ class EspaceTravaillable(object):
             if culture_basse is not None and not culture_basse == Culture.NONE:
                 self.list_a_planter.increase_culture(culture_basse)
 
+
     def enlever_culture_hauteur(self, row, column, culture, cultures):
         if culture is not None and not culture == Culture.NONE:
             match culture.taille_necessaire:
@@ -76,17 +81,16 @@ class EspaceTravaillable(object):
                     for rowindex in range(row, row+culture.taille_necessaire):
                         for columnindex in range(column, column+culture.taille_necessaire):
                             cultures[rowindex,columnindex].culture = Culture.NONE
-                            self.planches.find_planche(rowindex, columnindex).set_culture_start(rowindex, columnindex, None)
+                            self.planches.find_planche(rowindex, columnindex).set_culture_start(rowindex, columnindex, None, culture.hauteur_culture)
                             self.planches.find_planche(rowindex, columnindex).add_culture(rowindex, columnindex, Culture.NONE)
 
 
     def deplacer_culture(self, rowinit, columninit, row, column):
         culture_haute = self.cultures_haute[rowinit, columninit].culture
-        culture_basse = self.cultures_haute[rowinit, columninit].culture
-        if self.enlever_culture(rowinit, columninit) is not None:
-            self.placer_culture(culture_haute, row, column)
-            self.placer_culture(culture_basse, row, column)
-        return culture_haute
+        culture_basse = self.cultures_basse[rowinit, columninit].culture
+        self.enlever_culture(rowinit, columninit)
+        self.placer_culture(culture_haute, row, column)
+        self.placer_culture(culture_basse, row, column)
 
     def get_culture(self, row, column, hauteur = HauteurCulture.BASSE):
         if hauteur == HauteurCulture.BASSE:

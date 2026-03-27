@@ -68,3 +68,8 @@ class ListCulture(object):
         cultures_associees.sort(key=lambda x: x.taille, reverse=True)
         return cultures_associees
 
+    def clear(self):
+        for culture_for_list in self.cultures:
+            culture_for_list.nombre = culture_for_list.nombre +  culture_for_list.nombre_plantes
+            culture_for_list.nombre_plantes = 0
+

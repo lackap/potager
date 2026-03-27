@@ -7,6 +7,9 @@ class EspaceController:
     def __init__(self):
         self.espace = EspaceTravaillable()
 
+    def clear(self):
+        self.espace.clear()
+
     def add_planche(self, planche):
         self.espace.add_planche(planche)
 
@@ -20,8 +23,8 @@ class EspaceController:
             return True
         return False
 
-    def deplacer_culture(self, rowinit, columninit, row, column):
-        if self.espace.can_insert_culture(row, column, self.espace.get_culture(rowinit, columninit)):
+    def deplacer_culture(self, rowinit, columninit, row, column, display_level):
+        if self.espace.can_insert_culture(row, column, self.espace.get_culture(rowinit, columninit, display_level)):
             self.espace.deplacer_culture(rowinit, columninit, row, column)
             return True
         return False
@@ -75,6 +78,16 @@ class EspaceController:
         self.add_culture(Culture.OIGNON, 15)
         self.add_culture(Culture.MELON, 3)
         self.add_culture(Culture.CONCOMBRE, 4)
-
-        for planche in self.espace.planches.planches:
-            self.add_planche(planche)
+        self.add_culture(Culture.HARICOT, 15)
+        self.add_planche(self.espace.planches.plancheFramboise)
+        self.add_planche(self.espace.planches.plancheFraise)
+        self.add_planche(self.espace.planches.plancheOlivier)
+        self.add_planche(self.espace.planches.plancheGauche)
+        self.add_planche(self.espace.planches.plancheCentreHaut)
+        self.add_planche(self.espace.planches.plancheCentreBasse)
+        self.add_planche(self.espace.planches.plancheBasse)
+        self.add_planche(self.espace.planches.plancheDroite)
+        self.add_planche(self.espace.planches.carre1)
+        self.add_planche(self.espace.planches.carre2)
+        self.add_planche(self.espace.planches.carre3)
+        self.add_planche(self.espace.planches.carre4)

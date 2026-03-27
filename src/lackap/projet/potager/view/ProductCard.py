@@ -1,9 +1,8 @@
 import calendar
 
-from PyQt5 import QtCore
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QPalette
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLabel, QHBoxLayout, QPushButton, QFrame, QGroupBox
-from pyqt_color_button import ColorButton
+from PyQt6 import QtCore
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QFormLayout, QHBoxLayout, QLabel, QGroupBox
 
 
 class ProductCardWidget(QGroupBox):
@@ -30,9 +29,6 @@ class ProductCardWidget(QGroupBox):
         form_layout.addRow(QLabel("Nombre plantés"), QLabel(str(nombre_plantes)))
         form_layout.addRow(QLabel("Mois semi"), QLabel(calendar.month_name[culture.mois_semi]))
         form_layout.addRow(QLabel("Mois plantation"), QLabel(calendar.month_name[culture.mois_plantation]))
-        colored_square = ColorButton(20)
-        colored_square.setColor(culture.color)
-        form_layout.addRow(QLabel("Couleur"), colored_square)
 
         main_layout.addLayout(form_layout)
 

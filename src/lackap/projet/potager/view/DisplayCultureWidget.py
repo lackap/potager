@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 
 
 class DisplayCultureWidget(QWidget):
@@ -8,6 +8,9 @@ class DisplayCultureWidget(QWidget):
         layout = QHBoxLayout()
 
         layout_left = QVBoxLayout()
+        clear_button = QPushButton()
+        clear_button.setText("Clear table")
+        clear_button.clicked.connect(self.clear)
         display_culture_button = QPushButton()
         display_culture_button.setText("Afficher les cultures")
         display_culture_button.clicked.connect(lambda: self.switch_to_view(1))
@@ -25,6 +28,7 @@ class DisplayCultureWidget(QWidget):
         switch_level_button.clicked.connect(self.switch_display_level)
 
         layout_left.addWidget(self.controllers.ui_controller.list_a_planter)
+        layout_left.addWidget(clear_button)
         layout_left.addWidget(switch_level_button)
         layout_left.addWidget(display_culture_button)
         layout_left.addWidget(auto_fill_button)
@@ -40,6 +44,8 @@ class DisplayCultureWidget(QWidget):
 
         self.setLayout(layout)
 
+    def clear(self):
+        self.controllers.clear()
     def autofill_click(self):
         self.controllers.auto_fill()
     def save_click(self):

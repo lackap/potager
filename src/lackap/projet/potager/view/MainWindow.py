@@ -1,5 +1,5 @@
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import QMainWindow
+from PyQt6 import QtGui
+from PyQt6.QtWidgets import QMainWindow
 
 from src.lackap.projet.potager.controller.ProductController import ProductController
 from src.lackap.projet.potager.controller.UiController import UiController

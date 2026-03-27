@@ -147,9 +147,7 @@ class Planches(object):
         self.carre2 = Planche("Carre2", 24, 29, 32, 37, Culture.NONE,False)
         self.carre3 = Planche("Carre3", 32, 37, 32, 37, Culture.NONE,False)
         self.carre4 = Planche("Carre4", 40, 45, 32, 37, Culture.NONE,False)
-        self.planches = {self.plancheFraise, self.plancheFramboise, self.plancheOlivier, self.plancheGauche,
-                        self.plancheCentreHaut,self.plancheCentreBasse,self.plancheBasse, self.plancheDroite,
-                         self.carre1,self.carre2,self.carre3, self.carre4}
+        self.planches = []
 
     def find_planche(self, row, column):
         for planche in self.planches:
@@ -157,3 +155,6 @@ class Planches(object):
                 if planche.start_y <= column <= planche.end_y:
                     return planche
         return None
+
+    def clear(self):
+        self.planches.clear()
