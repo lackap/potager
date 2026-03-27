@@ -58,8 +58,8 @@ class EspaceController:
         return True
 
     def inserer_culture_planche(self, planche, culture):
-        for row in range(planche.startX, planche.endX):
-            for column in range(planche.startY, planche.endY):
+        for row in range(planche.start_x, planche.end_x):
+            for column in range(planche.start_y, planche.end_y):
                 if self.espace.can_insert_culture(row, column, culture):
                     self.placer_culture(culture, row, column)
                     #print(culture.culture_type + " inséré sur la planche " + planche.name)

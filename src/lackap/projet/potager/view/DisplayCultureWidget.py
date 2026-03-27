@@ -20,8 +20,12 @@ class DisplayCultureWidget(QWidget):
         load_button = QPushButton()
         load_button.setText("Load")
         load_button.clicked.connect(self.load_click)
+        switch_level_button = QPushButton()
+        switch_level_button.setText("Changer vue hauteur")
+        switch_level_button.clicked.connect(self.switch_display_level)
 
         layout_left.addWidget(self.controllers.ui_controller.list_a_planter)
+        layout_left.addWidget(switch_level_button)
         layout_left.addWidget(display_culture_button)
         layout_left.addWidget(auto_fill_button)
         layout_left.addWidget(save_button)
@@ -44,3 +48,5 @@ class DisplayCultureWidget(QWidget):
         self.controllers.load()
     def switch_to_view(self, index = 1):
         self.parent().switch_to_view(index)
+    def switch_display_level(self):
+        self.controllers.ui_controller.switch_level(self.controllers.espace_controller.espace)

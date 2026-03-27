@@ -18,6 +18,10 @@ class UiController:
     def refresh_table(self,espace):
         self.table.refresh(espace.planches)
 
+    def switch_level(self, espace):
+        self.table.switch_level()
+        self.table.refresh(espace.planches)
+
     def initialize(self, controllers):
         self.list_a_planter.controllers = controllers
         self.table.controllers = controllers

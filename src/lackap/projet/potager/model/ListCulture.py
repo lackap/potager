@@ -2,6 +2,13 @@ from src.lackap.projet.potager.model.CultureForList import CultureForList
 from src.lackap.projet.potager.model.CulturesAssociees import CulturesAssociees
 
 
+def est_associable_groupe(culture_for_list, cultures_associe):
+    for culture_associee in cultures_associe.cultures:
+        if not culture_for_list.culture.associable(culture_associee.culture):
+            return False
+    return True
+
+
 class ListCulture(object):
     def __init__(self):
         self.cultures = []
@@ -50,7 +57,7 @@ class ListCulture(object):
         for culture_for_list in self.cultures:
             added = False
             for cultures_associee in cultures_associees:
-                if self.est_associable_groupe(culture_for_list, cultures_associee):
+                if est_associable_groupe(culture_for_list, cultures_associee):
                     cultures_associee.add_culture(culture_for_list)
                     added = True
                     break
@@ -60,10 +67,4 @@ class ListCulture(object):
                 cultures_associees.append(cultures_associee)
         cultures_associees.sort(key=lambda x: x.taille, reverse=True)
         return cultures_associees
-
-    def est_associable_groupe(self, culture_for_list, cultures_associe):
-        for culture_associee in cultures_associe.cultures:
-            if not culture_for_list.culture.associable(culture_associee.culture):
-                return False
-        return True
 

@@ -2,6 +2,11 @@ from enum import Enum
 
 from PyQt5 import QtGui
 
+class HauteurCulture(Enum):
+    BASSE=1,
+    HAUTE=2,
+    COMPLETE=3
+
 class FamilleCulture(Enum):
     # Oignon, Poireau, Echalote
     AMARYLLIDACEE = (1, "Amaryllidacee", [4, 5, 11], [1, 2])
@@ -45,20 +50,20 @@ class FamilleCulture(Enum):
 
 
 class Culture(Enum):
-    NONE = ("", 0, QtGui.QColor(128,128,128), 3, 3, FamilleCulture.RIEN)
-    FRAMBOISE = ("Framboise", 3, QtGui.QColor(102,0,51), 0, 0, FamilleCulture.FIXE)
-    FRAISE = ("Fraise", 2, QtGui.QColor(255,51,51), 0, 0, FamilleCulture.FIXE)
-    OLIVIER = ("Olivier", 4, QtGui.QColor(204,255,153), 0, 0, FamilleCulture.FIXE)
-    TOMATE = ("Tomate", 3, QtGui.QColor(255,0,0), 3, 5, FamilleCulture.SOLANACEE)
-    COURGETTE = ("Courgette", 3, QtGui.QColor(25,102,29), 3, 5, FamilleCulture.CUCURBITACEE)
-    POMME_DE_TERRE = ("Pdt", 2, QtGui.QColor(194,167,31), 4, 4, FamilleCulture.NETTOYAGE)
-    POIREAU = ("Poireau", 1, QtGui.QColor(76, 166, 107), 3, 3, FamilleCulture.AMARYLLIDACEE)
-    OIGNON = ("Oignon", 1, QtGui.QColor(213,132,144), 3, 3, FamilleCulture.AMARYLLIDACEE)
-    CAROTTE = ("Carotte", 1, QtGui.QColor(244,102,27), 3, 3, FamilleCulture.APIACEE)
-    MELON = ("Melon", 3, QtGui.QColor(251,202,127), 4, 6, FamilleCulture.CUCURBITACEE)
-    CONCOMBRE = ("Concombre", 3, QtGui.QColor(55,110,32), 4, 5, FamilleCulture.CUCURBITACEE)
+    NONE = ("", 0, QtGui.QColor(128,128,128), 3, 3, HauteurCulture.BASSE, FamilleCulture.RIEN)
+    FRAMBOISE = ("Framboise", 3, QtGui.QColor(102,0,51), 0, 0, HauteurCulture.COMPLETE, FamilleCulture.FIXE)
+    FRAISE = ("Fraise", 2, QtGui.QColor(255,51,51), 0, 0, HauteurCulture.COMPLETE, FamilleCulture.FIXE)
+    OLIVIER = ("Olivier", 4, QtGui.QColor(204,255,153), 0, 0, HauteurCulture.COMPLETE, FamilleCulture.FIXE)
+    TOMATE = ("Tomate", 3, QtGui.QColor(255,0,0), 3, 5, HauteurCulture.HAUTE, FamilleCulture.SOLANACEE)
+    COURGETTE = ("Courgette", 3, QtGui.QColor(25,102,29), 3, 5, HauteurCulture.BASSE, FamilleCulture.CUCURBITACEE)
+    POMME_DE_TERRE = ("Pdt", 2, QtGui.QColor(194,167,31), 4, 4, HauteurCulture.BASSE, FamilleCulture.NETTOYAGE)
+    POIREAU = ("Poireau", 1, QtGui.QColor(76, 166, 107), 3, 3, HauteurCulture.COMPLETE, FamilleCulture.AMARYLLIDACEE)
+    OIGNON = ("Oignon", 1, QtGui.QColor(213,132,144), 3, 3, HauteurCulture.COMPLETE, FamilleCulture.AMARYLLIDACEE)
+    CAROTTE = ("Carotte", 1, QtGui.QColor(244,102,27), 3, 3, HauteurCulture.COMPLETE, FamilleCulture.APIACEE)
+    MELON = ("Melon", 3, QtGui.QColor(251,202,127), 4, 6, HauteurCulture.BASSE, FamilleCulture.CUCURBITACEE)
+    CONCOMBRE = ("Concombre", 3, QtGui.QColor(55,110,32), 4, 5, HauteurCulture.BASSE, FamilleCulture.CUCURBITACEE)
 
-    def __init__(self, culture_type, taille_necessaire, color = None, mois_semi = None, mois_plantation = None, famille = None):
+    def __init__(self, culture_type, taille_necessaire, color = None, mois_semi = None, mois_plantation = None, hauteur_culture = HauteurCulture.BASSE, famille = None):
         self.culture_type = culture_type
         if color is not None:
             self.color = color
@@ -68,6 +73,7 @@ class Culture(Enum):
         self.mois_semi = mois_semi
         self.mois_plantation = mois_plantation
         self.famille = famille
+        self.hauteur_culture = hauteur_culture
 
     def plantable_apres(self, ancienne_culture):
         if not ancienne_culture or ancienne_culture is None or self.famille.is_plantable_apres(ancienne_culture.famille.culture_type):
