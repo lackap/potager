@@ -25,23 +25,37 @@ class ProductsTable(QTableWidget):
         self.verticalHeader().setMinimumSectionSize(1)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.display_level = 1
+
+    def switch_level(self):
+        if self.display_level == 1:
+            self.display_level = 2
+        else:
+            self.display_level = 1
 
     def refresh(self, planches):
         for planche in planches.planches:
             for row in range(planche.start_x, planche.end_x):
                 for column in range(planche.start_y, planche.end_y):
-                    case_tableau = planche.cultures_basse[row-planche.start_x, column-planche.start_y]
+                    if self.display_level == 1:
+                        case_tableau = planche.cultures_basse[row-planche.start_x, column-planche.start_y]
+                    else:
+                        case_tableau = planche.cultures_haute[row-planche.start_x, column-planche.start_y]
+
                     if self.item(row, column):
-                        self.item(row, column).setBackground(planche.cultures_basse[row-planche.start_x, column-planche.start_y].culture.color)
+                            self.item(row, column).setBackground(case_tableau.culture.color)
+                            if case_tableau.culture == Culture.NONE:
+                                self.setSpan(row, column, 1, 1)
+                                self.item(row, column).setText("")
                     else:
                         self.setItem(row, column, QTableWidgetItem())
                         self.item(row, column).setBackground(case_tableau.culture.color)
-                    init_culture = case_tableau.init_culture
-                    if init_culture is None:
+
+                    if case_tableau.init_culture is None:
                         self.setSpan(row, column, 1, 1)
                         self.item(row, column).setText("")
                         case_tableau.init_culture = False
-                    if init_culture:
+                    if case_tableau.init_culture:
                         taille = case_tableau.culture.taille_necessaire
                         self.item(row, column).setText(case_tableau.culture.culture_type)
                         self.setSpan(row, column, taille, taille)
