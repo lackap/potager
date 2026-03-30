@@ -34,7 +34,7 @@ class ProductCardWidget(QGroupBox):
 
         image_label = QLabel(self)
         pixmap = QPixmap("resources/culture_image/" + culture.culture_type + ".jpg")
-        scaled_pixmap = pixmap.scaled(150, 150, QtCore.Qt.KeepAspectRatio)
+        scaled_pixmap = pixmap.scaled(150, 150, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
         image_label.setPixmap(scaled_pixmap)
         main_layout.addWidget(image_label)
 

@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtGui import QMouseEvent, QColor
+from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
 
 from src.lackap.projet.potager.model.Culture import Culture, HauteurCulture
@@ -32,7 +32,9 @@ class ProductsTable(QTableWidget):
     def reset_view(self, espace):
         for x in range(espace.endX):
             for y in range(espace.endY):
-                self.setSpan(x, y, 1, 1)
+
+                if self.rowSpan(x, y) > 1 or self.columnSpan(x, y) > 1:
+                    self.setSpan(x, y, 1, 1)
                 if self.item(x, y):
                     self.item(x, y).setText("")
                     self.item(x, y).setBackground(QColor(255, 255, 255))
@@ -49,26 +51,29 @@ class ProductsTable(QTableWidget):
                     if self.item(row, column):
                         self.item(row, column).setBackground(case_tableau.culture.color)
                         if case_tableau.culture == Culture.NONE:
-                            self.setSpan(row, column, 1, 1)
+                            if self.rowSpan(row, column) > 1 or self.columnSpan(row, column) > 1:
+                                self.setSpan(row, column, 1, 1)
                             self.item(row, column).setText("")
                     else:
                         self.setItem(row, column, QTableWidgetItem())
                         self.item(row, column).setBackground(case_tableau.culture.color)
 
                     if case_tableau.init_culture is None:
-                        self.setSpan(row, column, 1, 1)
+                        if self.rowSpan(row, column) > 1 or self.columnSpan(row, column) > 1:
+                            self.setSpan(row, column, 1, 1)
                         self.item(row, column).setText("")
                         case_tableau.init_culture = False
                     if case_tableau.init_culture:
                         taille = case_tableau.culture.taille_necessaire
                         self.item(row, column).setText(case_tableau.culture.culture_type)
-                        self.setSpan(row, column, taille, taille)
+                        if self.rowSpan(row, column) > 1 or self.columnSpan(row, column) > 1:
+                            self.setSpan(row, column, taille, taille)
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.MouseButtonPress:
             mouse_event = event
             if mouse_event.buttons() == Qt.MouseButton.RightButton:
-                item = self.itemAt(mouse_event.pos())
+                item = self.itemAt(int(mouse_event.position().x()), int(mouse_event.position().y()))
                 if item:
                     if self.controllers.enlever_culture(item.row(), item.column()) is not None:
                         return True
@@ -80,18 +85,18 @@ class ProductsTable(QTableWidget):
         e.accept()
 
     def dropEvent(self, e):
-        pos = e.pos()
+        pos = e.position()
         widget = e.source()
         # Cas d'un élément drop depuis la liste des éléments a planter
         if isinstance(widget, ProductsList):
             for widgetItem in widget.selectedItems():
                 culture = Culture.get_culture(widgetItem.text(0).split()[0])
-                self.controllers.placer_culture(culture, self.rowAt(pos.y()), self.columnAt(pos.x()))
+                self.controllers.placer_culture(culture, self.rowAt(int(pos.y())), self.columnAt(int(pos.x())))
         # Cas d'un élément qu'on a bougé dans le tableau
         if isinstance(widget, QTableWidget):
             for widgetItem in widget.selectedItems():
-                self.controllers.deplacer_culture(widgetItem.row(), widgetItem.column(), self.rowAt(pos.y()),
-                                                  self.columnAt(pos.x()))
+                self.controllers.deplacer_culture(widgetItem.row(), widgetItem.column(), self.rowAt(int(pos.y())),
+                                                  self.columnAt(int(pos.x())))
         e.accept()
 
     def menuContextTree(self, point):
@@ -106,13 +111,9 @@ class ProductsTable(QTableWidget):
         menu.exec(self.mapToGlobal(point))
 
     def add_planche(self):
-
         planche_dialog = AddPlancheDialog(self.window())
         if planche_dialog.exec():
             self.controllers.add_planche_by_values(planche_dialog.planche_name.text(),
                                                    int(planche_dialog.start_x.text()),
                                                    int(planche_dialog.start_y.text()), int(planche_dialog.end_x.text()),
                                                    int(planche_dialog.end_y.text()))
-            print("Success!")
-        else:
-            print("Cancel!")

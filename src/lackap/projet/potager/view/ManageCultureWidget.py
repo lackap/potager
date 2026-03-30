@@ -19,7 +19,7 @@ class ManageCultureWidget(QWidget):
             culture_for_list = self.controllers.espace_controller.espace.list_a_planter.find_culture(culture)
             if culture_for_list is None:
                 continue
-            layout.addWidget(ProductCardWidget(culture, culture_for_list.nombre, culture_for_list.nombre_plantes), alignment=Qt.AlignTop)
+            layout.addWidget(ProductCardWidget(culture, culture_for_list.nombre, culture_for_list.nombre_plantes), alignment=Qt.AlignmentFlag.AlignTop)
             if count == 3:
                 widget_to_add = QWidget()
                 widget_to_add.setLayout(layout)
@@ -45,7 +45,7 @@ class ManageCultureWidget(QWidget):
         display_culture_button.setFixedWidth(300)
         display_culture_button.setText("Afficher potager")
         display_culture_button.clicked.connect(lambda: self.switch_to_view(0))
-        main_layout.addWidget(display_culture_button, alignment=Qt.AlignCenter)
+        main_layout.addWidget(display_culture_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(main_layout)
 
