@@ -36,8 +36,8 @@ class ProductController:
             self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def enlever_culture(self, row, column):
-        if self.espace_controller.enlever_culture(row, column) is not None:
-            self.ui_controller.refresh_display(self.espace_controller.espace)
+        self.espace_controller.enlever_culture(row, column)
+        self.ui_controller.refresh_display(self.espace_controller.espace)
 
     def auto_fill(self):
         self.espace_controller.auto_fill()

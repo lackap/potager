@@ -16,7 +16,6 @@ class ProductsTable(QTableWidget):
         self.setAcceptDrops(True)
         self.setRowCount(table_rows)
         self.setColumnCount(table_columns)
-        self.viewport().installEventFilter(self)
         self.controllers = None
         self.verticalScrollBar().setVisible(False)
         self.horizontalScrollBar().setVisible(False)
@@ -66,20 +65,7 @@ class ProductsTable(QTableWidget):
                     if case_tableau.init_culture:
                         taille = case_tableau.culture.taille_necessaire
                         self.item(row, column).setText(case_tableau.culture.culture_type)
-                        if self.rowSpan(row, column) > 1 or self.columnSpan(row, column) > 1:
-                            self.setSpan(row, column, taille, taille)
-
-    def eventFilter(self, source, event):
-        if event.type() == QEvent.Type.MouseButtonPress:
-            mouse_event = event
-            if mouse_event.buttons() == Qt.MouseButton.RightButton:
-                item = self.itemAt(int(mouse_event.position().x()), int(mouse_event.position().y()))
-                if item:
-                    if self.controllers.enlever_culture(item.row(), item.column()) is not None:
-                        return True
-                else:
-                    return True
-        return False
+                        self.setSpan(row, column, taille, taille)
 
     def dragEnterEvent(self, e):
         e.accept()
@@ -104,10 +90,12 @@ class ProductsTable(QTableWidget):
         menu = QtWidgets.QMenu()
         if index.isValid():
             menu.addSeparator()
-            action_ajout = menu.addAction("Ajouter une planche")
-            action_ajout.triggered.connect(self.add_planche)
-            action_retrait = menu.addAction("Enlever 1")
-        action_manage = menu.addAction("Gerer mes cultures")
+            action_ajout_planche = menu.addAction("Ajouter une planche")
+            action_ajout_planche.triggered.connect(self.add_planche)
+            action_retrait_culture = menu.addAction("Enlever 1")
+            action_retrait_culture.triggered.connect(lambda: self.enlever_culture(index.row(), index.column()))
+            action_manage = menu.addAction("Gerer mes cultures")
+            action_manage.triggered.connect(self.switch_to_view_manage)
         menu.exec(self.mapToGlobal(point))
 
     def add_planche(self):
@@ -117,3 +105,7 @@ class ProductsTable(QTableWidget):
                                                    int(planche_dialog.start_x.text()),
                                                    int(planche_dialog.start_y.text()), int(planche_dialog.end_x.text()),
                                                    int(planche_dialog.end_y.text()))
+    def enlever_culture(self, row, column):
+        self.controllers.enlever_culture(row, column)
+    def switch_to_view_manage(self):
+        self.window().switch_to_view(1)
