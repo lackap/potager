@@ -9,6 +9,8 @@ class ManageCultureWidget(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.controllers = parent.controllers
+
+        self.product_cards = []
         main_layout = QVBoxLayout()
 
         count = 0
@@ -19,7 +21,9 @@ class ManageCultureWidget(QWidget):
             culture_for_list = self.controllers.espace_controller.espace.list_a_planter.find_culture(culture)
             if culture_for_list is None:
                 continue
-            layout.addWidget(ProductCardWidget(culture, culture_for_list.nombre, culture_for_list.nombre_plantes), alignment=Qt.AlignmentFlag.AlignTop)
+            product_card = ProductCardWidget(culture, culture_for_list.nombre, culture_for_list.nombre_plantes)
+            self.product_cards.append(product_card)
+            layout.addWidget(product_card, alignment=Qt.AlignmentFlag.AlignTop)
             if count == 3:
                 widget_to_add = QWidget()
                 widget_to_add.setLayout(layout)
@@ -41,13 +45,28 @@ class ManageCultureWidget(QWidget):
 
         main_layout.addStretch()
 
+        buttons_layout = QHBoxLayout()
+
         display_culture_button = QPushButton()
         display_culture_button.setFixedWidth(300)
         display_culture_button.setText("Afficher potager")
         display_culture_button.clicked.connect(lambda: self.switch_to_view(0))
-        main_layout.addWidget(display_culture_button, alignment=Qt.AlignmentFlag.AlignCenter)
+        buttons_layout.addWidget(display_culture_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
+        display_culture_button = QPushButton()
+        display_culture_button.setFixedWidth(300)
+        display_culture_button.setText("Sauvegarder")
+        display_culture_button.clicked.connect(self.save)
+        buttons_layout.addWidget(display_culture_button, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        main_layout.addLayout(buttons_layout)
         self.setLayout(main_layout)
 
     def switch_to_view(self, index = 0):
         self.parent().switch_to_view(index)
+
+    def save(self):
+        for product_card in self.product_cards:
+            self.controllers.espace_controller.update_culture_number(product_card.culture, int(product_card.nombre_a_planter.text()))
+        self.parent().switch_to_view(0)
+

@@ -16,6 +16,9 @@ class EspaceController:
     def add_culture(self, culture, nombre):
         self.espace.add_culture(culture, nombre)
 
+    def update_culture_number(self, culture, nombre):
+        self.espace.update_culture_number(culture, nombre)
+
 
     def placer_culture(self, culture, row, column):
         if self.espace.can_insert_culture(row, column, culture) and self.espace.list_a_planter.find_culture_number(culture) > 0:

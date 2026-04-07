@@ -37,6 +37,9 @@ class EspaceTravaillable(object):
     def add_culture(self, culture, nombre):
         self.list_a_planter.add_culture(culture, nombre)
 
+    def update_culture_number(self, culture, nombre):
+        self.list_a_planter.update_culture_number(culture, nombre)
+
     def placer_culture(self, culture, row, column):
         self.list_a_planter.decrease_culture(culture)
         match culture.taille_necessaire:
@@ -85,12 +88,14 @@ class EspaceTravaillable(object):
                             self.planches.find_planche(rowindex, columnindex).add_culture(rowindex, columnindex, Culture.NONE)
 
 
-    def deplacer_culture(self, rowinit, columninit, row, column):
-        culture_haute = self.cultures_haute[rowinit, columninit].culture
-        culture_basse = self.cultures_basse[rowinit, columninit].culture
+    def deplacer_culture(self, rowinit, columninit, row, column, display_level):
         self.enlever_culture(rowinit, columninit)
-        self.placer_culture(culture_haute, row, column)
-        self.placer_culture(culture_basse, row, column)
+        if display_level == HauteurCulture.BASSE:
+            culture_basse = self.cultures_basse[rowinit, columninit].culture
+            self.placer_culture(culture_basse, row, column)
+        if display_level == HauteurCulture.HAUTE:
+            culture_haute = self.cultures_haute[rowinit, columninit].culture
+            self.placer_culture(culture_haute, row, column)
 
     def get_culture(self, row, column, hauteur = HauteurCulture.BASSE):
         if hauteur == HauteurCulture.BASSE:

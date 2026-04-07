@@ -22,6 +22,15 @@ class ListCulture(object):
         else:
             self.cultures.append(CultureForList(culture, nombre))
 
+    def update_culture_number(self, culture, nombre):
+        item = self.find_culture(culture)
+        if item is not None:
+            if not nombre:
+                nombre = 0
+            item.nombre = nombre
+        else:
+            self.cultures.append(CultureForList(culture, nombre))
+
     def increase_culture(self, culture):
         item = self.find_culture(culture)
         if item is not None:
