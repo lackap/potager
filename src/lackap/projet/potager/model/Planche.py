@@ -78,11 +78,11 @@ class Planche(object):
             priority.level = priority.level + 1
         else:
             priority.level = 0
-        if priority.level >= 2:
+        if priority.level >= 1:
             count = self.can_plant(culture, nombre)
             priority.level = priority.level + 1
             priority.nombre = count
-        if priority.level >= 3:
+        if priority.level >= 1:
             if self.validate_association(culture):
                 priority.level = priority.level + 2
             else:
