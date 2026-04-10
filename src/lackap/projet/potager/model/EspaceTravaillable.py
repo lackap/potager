@@ -59,21 +59,22 @@ class EspaceTravaillable(object):
 
         return culture
 
-    def enlever_culture(self, row, column):
-        culture_haute = self.cultures_haute[row, column].culture
-        culture_basse = self.cultures_basse[row, column].culture
-        if culture_haute is not None and not culture_haute == Culture.NONE:
-            self.enlever_culture_hauteur(row, column, culture_haute, self.cultures_haute)
-        if culture_basse is not None and not culture_basse == Culture.NONE:
-            self.enlever_culture_hauteur(row, column, culture_basse, self.cultures_basse)
-        if culture_haute is not None and not culture_haute == Culture.NONE:
-            self.list_a_planter.increase_culture(culture_haute)
-            if culture_basse is not None and not culture_basse == Culture.NONE and culture_basse.hauteur_culture == HauteurCulture.BASSE:
-                self.list_a_planter.increase_culture(culture_basse)
+    def enlever_culture(self, row, column, display_level):
+        if display_level == HauteurCulture.BASSE:
+            culture = self.cultures_basse[row, column].culture
         else:
-            if culture_basse is not None and not culture_basse == Culture.NONE:
-                self.list_a_planter.increase_culture(culture_basse)
+            culture = self.cultures_haute[row, column].culture
 
+        if culture is not None and not culture == Culture.NONE and culture.hauteur_culture == HauteurCulture.BASSE:
+            self.enlever_culture_hauteur(row, column, culture, self.cultures_basse)
+            self.list_a_planter.increase_culture(culture)
+        if culture is not None and not culture == Culture.NONE and culture.hauteur_culture == HauteurCulture.HAUTE:
+            self.enlever_culture_hauteur(row, column, culture, self.cultures_haute)
+            self.list_a_planter.increase_culture(culture)
+        if culture is not None and not culture == Culture.NONE and culture.hauteur_culture == HauteurCulture.COMPLETE:
+            self.enlever_culture_hauteur(row, column, culture, self.cultures_basse)
+            self.enlever_culture_hauteur(row, column, culture, self.cultures_haute)
+            self.list_a_planter.increase_culture(culture)
 
     def enlever_culture_hauteur(self, row, column, culture, cultures):
         if culture is not None and not culture == Culture.NONE:
@@ -89,13 +90,15 @@ class EspaceTravaillable(object):
 
 
     def deplacer_culture(self, rowinit, columninit, row, column, display_level):
-        self.enlever_culture(rowinit, columninit)
         if display_level == HauteurCulture.BASSE:
-            culture_basse = self.cultures_basse[rowinit, columninit].culture
-            self.placer_culture(culture_basse, row, column)
+            culture = self.cultures_basse[rowinit, columninit].culture
+        else:
+            culture = self.cultures_haute[rowinit, columninit].culture
+        self.enlever_culture(rowinit, columninit, display_level)
+        if display_level == HauteurCulture.BASSE:
+            self.placer_culture(culture, row, column)
         if display_level == HauteurCulture.HAUTE:
-            culture_haute = self.cultures_haute[rowinit, columninit].culture
-            self.placer_culture(culture_haute, row, column)
+            self.placer_culture(culture, row, column)
 
     def get_culture(self, row, column, hauteur = HauteurCulture.BASSE):
         if hauteur == HauteurCulture.BASSE:

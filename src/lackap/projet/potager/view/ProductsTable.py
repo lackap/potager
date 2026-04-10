@@ -106,6 +106,6 @@ class ProductsTable(QTableWidget):
                                                    int(planche_dialog.start_y.text()), int(planche_dialog.end_x.text()),
                                                    int(planche_dialog.end_y.text()))
     def enlever_culture(self, row, column):
-        self.controllers.enlever_culture(row, column)
+        self.controllers.enlever_culture(row, column, self.controllers.ui_controller.display_level)
     def switch_to_view_manage(self):
         self.window().switch_to_view(1)

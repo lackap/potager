@@ -28,12 +28,12 @@ class EspaceController:
 
     def deplacer_culture(self, rowinit, columninit, row, column, display_level):
         if self.espace.can_insert_culture(row, column, self.espace.get_culture(rowinit, columninit, display_level)):
-            self.espace.deplacer_culture(rowinit, columninit, row, column)
+            self.espace.deplacer_culture(rowinit, columninit, row, column, display_level)
             return True
         return False
 
-    def enlever_culture(self, row, column):
-        return self.espace.enlever_culture(row, column)
+    def enlever_culture(self, row, column, display_level):
+        return self.espace.enlever_culture(row, column, display_level)
 
     def auto_fill(self):
         optimized = True
